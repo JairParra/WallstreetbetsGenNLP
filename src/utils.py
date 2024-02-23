@@ -12,6 +12,11 @@ utils.py
 # general
 import pandas as pd
 from tqdm import tqdm
+from collections import Counter
+
+# visualization 
+import matplotlib.pyplot as plt
+from matplotlib import colors as mcolors
 
 
 #############################
@@ -72,3 +77,65 @@ def format_topics_sentences(ldamodel=None, corpus=None, texts=None):
     sent_topics_df.columns = ['Document_No', 'Dominant_Topic', 'Topic_Perc_Contrib', 'Keywords', 'Text']
 
     return sent_topics_df
+
+
+
+def plot_topic_keywords(lda_model, clean_texts):
+
+    # Extract topics and flatten data
+    topics = lda_model.show_topics(formatted=False)
+    data_flat = [w for w_list in clean_texts for w in w_list]
+    counter = Counter(data_flat)
+
+    # Initialize empty list to store data
+    out = []
+
+    # Iterate over topics and their words to retrieve the weights and
+    for i, topic in topics:
+        for word, weight in topic:
+            out.append([word, i , weight, counter[word]])
+
+    # Create DataFrame from collected data
+    df = pd.DataFrame(out, columns=['word', 'topic_id', 'importance', 'word_count'])
+
+    # Plot Word Count and Weights of Topic Keywords
+    fig, axes = plt.subplots(2, 2, figsize=(16,10), sharey=True, dpi=160)
+
+    # Define colors for each subplot
+    cols = [color for name, color in mcolors.TABLEAU_COLORS.items()]
+
+    # Iterate over subplots
+    for i, ax in enumerate(axes.flatten()):
+        # Plot bar chart for word count
+        ax.bar(x='word', height="word_count", data=df.loc[df.topic_id==i, :], color=cols[i], width=0.5, alpha=0.3, label='Word Count')
+
+        # Create twinx axis for importance
+        ax_twin = ax.twinx()
+
+        # Plot bar chart for word importance
+        ax_twin.bar(x='word', height="importance", data=df.loc[df.topic_id==i, :], color=cols[i], width=0.2, label='Weights')
+
+        # Set y-axis labels
+        ax.set_ylabel('Word Count', color=cols[i])
+        ax_twin.set_ylim(0, 0.030)
+        ax.set_ylim(0, 3500)
+
+        # Set title for subplot
+        ax.set_title('Topic: ' + str(i), color=cols[i], fontsize=16)
+
+        # Hide y-axis ticks
+        ax.tick_params(axis='y', left=False)
+
+        # Rotate x-axis labels
+        ax.set_xticklabels(df.loc[df.topic_id==i, 'word'], rotation=30, horizontalalignment= 'right')
+
+        # Add legends
+        ax.legend(loc='upper left')
+        ax_twin.legend(loc='upper right')
+
+    # Adjust layout
+    fig.tight_layout(w_pad=2)
+    fig.suptitle('Word Count and Importance of Topic Keywords', fontsize=22, y=1.05)
+
+    # Show plot
+    plt.show()
