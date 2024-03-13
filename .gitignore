@@ -166,3 +166,5 @@ cython_debug/
 .virtual_documents/
 *.code-workspace*
 *.DS_Store*
+*JENVY*
+*lda_models/*

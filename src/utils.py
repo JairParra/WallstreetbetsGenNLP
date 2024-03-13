@@ -29,6 +29,10 @@ def format_topics_sentences(ldamodel=None, corpus=None, texts=None):
     # Verify that parmeters are not None
     if ldamodel is None or corpus is None or texts is None:
         raise ValueError("The LDA model, corpus, and texts must be provided.")
+    
+    # verify that corpus and texts have the same length
+    if len(corpus) != len(texts):
+        raise ValueError("The corpus and texts must have the same length.")
 
     # Initialize a list to store each document's dominant topic and its properties
     records = []
@@ -77,7 +81,6 @@ def format_topics_sentences(ldamodel=None, corpus=None, texts=None):
     sent_topics_df.columns = ['Document_No', 'Dominant_Topic', 'Topic_Perc_Contrib', 'Keywords', 'Text']
 
     return sent_topics_df
-
 
 
 def plot_topic_keywords(lda_model, clean_texts):
