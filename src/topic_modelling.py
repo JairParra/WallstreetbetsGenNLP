@@ -72,85 +72,41 @@ pprint = pprint.PrettyPrinter(indent=4).pprint
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
-##########################################
-### 2. Text Cleaning and Preprocessing ###
-##########################################
-
-def clean_text(texts: Union[str, List[str], pd.Series], clean_emojis: bool = False, verbose:bool = False) -> Union[str, List[str]]:
-    """
-    Clean and preprocess text data for topic modeling.
-
-    This function performs several preprocessing steps on a list of text documents:
-    - Removes hyperlinks.
-    - Tokenizes and lemmatizes the text using spaCy.
-    - Converts and cleans emojis.
-    - Removes non-alphabetic characters, stopwords, and short tokens.
-    - Filters out verbs to reduce noise.
-    - Forms bigrams and trigrams, filtering out those containing stopwords or non-alphabetic characters.
-    - Splits n-grams longer than 4 into individual tokens.
-
-    Parameters:
-    - texts: A list of text documents to be cleaned.
-    - clean_emojis: A boolean indicating whether emojis should be removed from the text.
-
-    Returns:
-    - A list of cleaned text documents, with each document represented as a list of tokens.
-    """
-
-    # Preprocess the texts to remove hyperlinks
-    texts = [re.sub(r'http\S+|www\S+|ftp\S+', '', text) for text in texts]
-
-    # Define a function to clean a single document
-    def clean_doc(doc: Doc, clean_emojis: bool = False) -> List[str]:
-        # Filter out tokens that are stopwords, verbs, or have length less than 2, then lemmatize and lowercase
-        tokens = [demojize(token.lemma_ if token.lemma_ != '-PRON-' else token.text).lower() for token in doc
-                  if not (token.is_stop or token.pos_ == 'VERB' or len(token.text) < 2)]
-
-        # Convert and clean emojis
-        tokens = [re.sub(r':', '_', token) if token.startswith(':') and token.endswith(':') else token for token in tokens]
-        if clean_emojis:
-            tokens = [re.sub(r'_.*_', '', token) for token in tokens]
-
-        # Remove non-alphabetic characters except for '_'
-        tokens = [re.sub(r'[^a-z_]', '', token) for token in tokens]
-
-        return tokens
-
-    # Apply the cleaning function to each document
-    cleaned_texts = [clean_doc(doc, clean_emojis) for doc in tqdm(nlp.pipe(texts, batch_size=50), 
-                                                                  total=len(texts), 
-                                                                  desc="Cleaning Texts",
-                                                                  disable=not verbose)]
-
-    # Form bigrams and trigrams
-    bigram_mod = gensim.models.phrases.Phraser(gensim.models.Phrases(cleaned_texts, min_count=3, threshold=10, connector_words=ENGLISH_CONNECTOR_WORDS))
-    trigram_mod = gensim.models.phrases.Phraser(gensim.models.Phrases(bigram_mod[cleaned_texts], threshold=10, connector_words=ENGLISH_CONNECTOR_WORDS))
-    cleaned_texts = [bigram_mod[doc] for doc in tqdm(cleaned_texts, desc="Creating bigrams...", disable=not verbose)]
-    cleaned_texts = [trigram_mod[bigram_mod[doc]] for doc in tqdm(cleaned_texts, desc="Creating trigrams...", disable=not verbose)]
-
-    # Filter out bigrams and trigrams containing stopwords or non-alphabetic characters, and split n-grams longer than 4
-    cleaned_texts = [[token for sub_token in doc for token in 
-                      (sub_token.split('_') if len(sub_token.split('_')) > 4 else [sub_token])
-                      if all(word not in stop_words and re.match('^[a-z_]+$', word) for word in token.split('_'))]
-                     for doc in cleaned_texts]
-
-    return cleaned_texts
-
 #########################
 ### 3. Model Training ###
 #########################
 
-def train_lda_model(clean_texts: List[List[str]], save_model: bool = False) -> gensim.models.ldamodel.LdaModel:
+def train_lda_model(clean_texts: List[List[str]], 
+                    save_model: bool = False, 
+                    lda_params:dict = None) -> Tuple[gensim.models.ldamodel.LdaModel, 
+                                                                                     List[List[Tuple[int, float]]], 
+                                                                                     gensim.corpora.Dictionary]:
     """
     Train an LDA model on a list of cleaned text documents.
 
     Parameters:
     - clean_texts: A list of cleaned text documents, with each document represented as a list of tokens.
     - save_model: A boolean indicating whether to save the trained model.
+    - lda_params: A dictionary containing the parameters used in the LDA model. If None, default parameters will be used.
 
     Returns:
     - The trained LDA model.
+    - The corpus in bag-of-words format, with each document represented as a list of (token_id, token_count) tuples.
+    - The dictionary mapping from word IDs to words.
     """
+
+    # Set up basic parameters if not input 
+    if lda_params is None:
+        
+        # Create a dictionary with the parameters used in the LDA model 
+        lda_params = {
+            'num_topics': 4,                 # The number of requested latent topics to be extracted from the training corpus
+            'update_every': 1,               # Number of documents to be iteratively updated
+            'chunksize': 100,                # Number of documents to be used in each training chunk
+            'passes': 7,                     # Number of passes through the corpus during training
+            'alpha': 'symmetric',            # Hyperparameter affecting sparsity/thickness of the topics
+            'iterations': 100,               # Maximum number of iterations through the corpus when inferring the topic distribution of a corpus
+        }
 
     # Create a subset of randomly selected clean texts
     clean_texts_subset = [clean_texts[i] for i in np.random.randint(0, len(clean_texts), len(clean_texts))]
@@ -163,16 +119,6 @@ def train_lda_model(clean_texts: List[List[str]], save_model: bool = False) -> g
 
     # Log the perplexity score at the end of each epoch.
     perplexity_logger = PerplexityMetric(corpus=corpus, logger='shell')
-
-    # Create a dictionary with the parameters used in the LDA model 
-    lda_params = {
-        'num_topics': 4,                 # The number of requested latent topics to be extracted from the training corpus
-        'update_every': 1,               # Number of documents to be iteratively updated
-        'chunksize': 100,                 # Number of documents to be used in each training chunk
-        'passes': 7,                     # Number of passes through the corpus during training
-        'alpha': 'symmetric',            # Hyperparameter affecting sparsity/thickness of the topics
-        'iterations': 100,               # Maximum number of iterations through the corpus when inferring the topic distribution of a corpus
-    }
 
     # Build LDA model with the corpus and dictionary
     lda_model = gensim.models.ldamodel.LdaModel(
@@ -202,36 +148,75 @@ def train_lda_model(clean_texts: List[List[str]], save_model: bool = False) -> g
         model_path = os.path.join(model_dir, model_name)
         lda_model.save(model_path)
 
-    return lda_model
+    return lda_model, corpus, id2word
 
 
-def load_lda_model(dir_path: str) -> gensim.models.ldamodel.LdaModel:
+
+def load_lda_model(dir_path: str) -> Tuple[gensim.models.ldamodel.LdaModel, gensim.corpora.Dictionary]:
     """
-    Load the LDA model from the specified directory.
+    Load the LDA model and id2word module from the specified directory.
 
     Parameters:
-    - dir_path: The directory path where the LDA model is located.
+    - dir_path: The directory path where the LDA model and id2word module are located.
 
     Returns:
     - The loaded LDA model.
+    - The loaded id2word module.
     """
-    # Search for the model file in the directory
+    # Search for the model file and id2word module in the directory and load them
     model_files = [f for f in os.listdir(dir_path) if f.endswith('.model')]
+    id2word_files = [f for f in os.listdir(dir_path) if f.endswith('.id2word')]
 
-    if not model_files:
-        raise FileNotFoundError("No model file found in the specified directory.")
+    if not model_files or not id2word_files:
+        raise FileNotFoundError("No model or id2word module file found in the specified directory.")
 
     # Load the model
     model_path = os.path.join(dir_path, model_files[0])
     lda_model = gensim.models.LdaModel.load(model_path)
 
-    return lda_model
+    # Load the id2word module
+    id2word_path = os.path.join(dir_path, id2word_files[0])
+    id2word = corpora.Dictionary.load(id2word_path)
+
+    # Print that the model and id2word have been loaded from the files
+    print(f"Model and id2word loaded from {model_path} and {id2word_path}")
+
+    return lda_model, id2word
 
 
 
 ####################
 ### 4. LDA Utils ###
 ####################
+
+def extract_top_words(lda_model: LdaModel, top_n: int = 10) -> Dict[int, List[str]]:
+    """
+    Extract the top words for each topic in the LDA model.
+
+    Parameters:
+    - lda_model: The trained LDA model.
+    - top_n: The number of top words to extract for each topic. Defaults to 10.
+
+    Returns:
+    - A dictionary mapping each topic ID to a list of top words.
+    """
+    # Create an empty dictionary to store the top words for each topic
+    top_words_dict = {}
+
+    # Iterate over each topic in the LDA model
+    for topic_id in range(lda_model.num_topics):
+
+        # Get the top words for the current topic
+        topic_words = lda_model.show_topic(topic_id, topn=top_n)
+
+        # Extract only the words from the topic_words list
+        top_words = [word for word, _ in topic_words]
+
+        # Store the top words for the current topic in the dictionary
+        top_words_dict[topic_id] = top_words
+
+    # Return the dictionary containing the top words for each topic
+    return top_words_dict
 
 
 def assign_topic(raw_text: str, lda_model: LdaModel, return_all: bool = False, verbose: bool = False) -> Union[Tuple[int, float], List[Tuple[int, float]]]:
