@@ -4,6 +4,7 @@ toic_modelling.py
     This script contains functions relating to topic modelling and LDA analysis.
 
 @author: Hair Parra
+@author: Jonathan Gonzales
 """
 
 ################## 
