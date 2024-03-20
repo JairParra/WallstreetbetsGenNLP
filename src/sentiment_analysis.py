@@ -2,7 +2,7 @@
 sentiment_analysis.py
     This script contains functions relating to sentiment analysis. 
 
-@author: Jonathan Gonzales
+@author: Jonathan Gonzalez
 @author: Hair Parra
 """
 
