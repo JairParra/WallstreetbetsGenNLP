@@ -42,6 +42,16 @@ def extract_tickers(text, minimum_market_cap=1e10):
             
     return valid_tickers
 
+def get_ticker_historical(ticker, start_date, end_date, interval="1d"):
+    
+    data = si.get_data(ticker, start_date, end_date, interval=interval)
+    data['return'] = data['adjclose'].pct_change()
+    data.drop(columns=['ticker'], inplace=True)
+    return data
+
 if __name__ == "__main__":
-    text = "I think $AAPL is a great stock, but I'm not sure about $TSLA"
-    print(extract_tickers(text))
+    text = "I think is a great stock, but I'm not sure about $TSLA, walmart"
+    list = extract_tickers(text)
+    for ticker in list:
+        print(ticker)
+        print(get_ticker_historical(ticker, "2019-01-01", "2025-01-01"))
