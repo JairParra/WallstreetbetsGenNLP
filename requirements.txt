@@ -1,0 +1,14 @@
+emoji
+en_core_web_sm
+gensim
+matplotlib
+nltk
+numpy
+pandas
+praw
+pyLDAvis
+spacy
+tqdm
+wordcloud
+yahoo_fin
+yfinance
