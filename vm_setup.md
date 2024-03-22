@@ -1,8 +1,16 @@
-# VM Setup 
+# VM Cloud Setup  Notes
 
 ## Installing pip to the VM 
 
-**Note:** Doesn't work!!! 
+**Correct command for installing pip** 
+
+```
+sudo apt-get install python3-pip
+```
+
+This should install all pip components, but using **an env is strongly encouraged** (see below). 
+
+**WRONG WAY:** Method below doesn't work!!! 
 
 ```
 sudo curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
@@ -34,13 +42,7 @@ error: externally-managed-environment
 note: If you believe this is a mistake, please contact your Python installation or OS distribution provider. You can override this, at the risk of breaking your Python installation or OS, by passing --break-system-packages.
 ```
 
-**Takehome:** non-Debian distribution requires to create an env
-
-**Correct command for installing pip** 
-
-```
-sudo apt-get install python3-pip
-```
+**Takehome:** non-Debian distribution requires to create an env?
 
 ## Installing an Env
 
@@ -78,9 +80,15 @@ ssh-keygen -t rsa -b 2048
 
 ![alt text](img/Firewall1.png)
 
-**Notes:** 
+**Direct SSH** 
+
 - Ensure SSH access in VPC network is enabled
 ```
 ssh -i path_to_private_key user@PUBLIC_IP
 ssh -i "C:PATH_SSH\.ssh\id_rsa" user@34.29.147.119
 ```
+
+**SSH through gcloud API** 
+
+TODO
+
