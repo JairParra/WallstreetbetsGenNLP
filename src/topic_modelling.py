@@ -48,10 +48,6 @@ import pyLDAvis
 import pyLDAvis.gensim
 from wordcloud import WordCloud
 
-# Custom scripts 
-from src.utils import format_topics_sentences
-from src.utils import plot_topic_keywords
-
 # Configurations 
 nltk.download('stopwords', quiet=True)
 stop_words = set(stopwords.words('english'))
@@ -274,7 +270,7 @@ def create_topics_df(texts: List[str], lda_model: LdaModel) -> pd.DataFrame:
         'most_likely_topic': topics_i[0][0],
         'probability': topics_i[0][1],
         'topics': [tup[0] for tup in topics_i]
-    } for doc_text, topics_i in zip(df['text'].iloc[:10], assigned_topics)]
+    } for doc_text, topics_i in zip(texts, assigned_topics)]
 
     # Create a dataframe from the records
     df_assigned_topics = pd.DataFrame(records)

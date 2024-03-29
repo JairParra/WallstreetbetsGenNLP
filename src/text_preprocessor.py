@@ -12,21 +12,12 @@ toic_modelling.py
 ##################
 
 # General imports
-import os 
 import pprint 
-import zipfile 
-import logging
-from collections import Counter
 from typing import Union, List, Tuple, Dict, Any
 from tqdm import tqdm 
 
 # Data Analysis and visualizations
-import numpy as np 
 import pandas as pd 
-import matplotlib.pyplot as plt 
-import matplotlib.colors as mcolors
-from matplotlib.patches import Rectangle
-from matplotlib.ticker import FuncFormatter
 
 # NLTK setup
 import nltk 
@@ -37,22 +28,10 @@ nltk.download('stopwords', quiet=True)
 import re 
 import spacy
 import gensim
-from gensim import corpora
 from emoji import demojize
 from spacy.tokens import Doc
 from nltk.corpus import stopwords
-from gensim.models import LdaModel
-from gensim.models.callbacks import PerplexityMetric
 from gensim.models.phrases import ENGLISH_CONNECTOR_WORDS
-
-# Dedicated NLP Visualizations 
-import pyLDAvis
-import pyLDAvis.gensim
-from wordcloud import WordCloud
-
-# Custom scripts 
-from src.utils import format_topics_sentences
-from src.utils import plot_topic_keywords
 
 # Configurations 
 nltk.download('stopwords', quiet=True)
@@ -145,28 +124,3 @@ def clean_lda_text(texts: Union[str, List[str], pd.Series], clean_emojis: bool =
                      for doc in cleaned_texts]
 
     return cleaned_texts
-
-
-#######################################
-### 4. Sentiment Text Preprocessing ###
-####################################### 
-
-def clean_sentiment_text(raw_text: str) -> str:
-    """
-    Clean and preprocess text data for sentiment classification.
-
-    This function performs text cleaning steps on a raw text document:
-    - Step1 
-    - Step2
-
-    Parameters:
-    - raw_text: The raw text document to be cleaned.
-
-    Returns:
-    - The cleaned text document.
-    """
-
-    # TODO: Implement text cleaning for sentiment analysis
-    text_clean = raw_text
-    
-    return text_clean

@@ -77,6 +77,8 @@ def add_body_column(df):
 #########################
 ### 3. Core Functions ###
 #########################
+
+
 def create_reddit_csv(subreddit_name= "wallstreetbets", csv_name="reddit.csv", limit=1000)-> None: 
     """
     Fetches data from the specified subreddit and saves it to a CSV file.
@@ -138,10 +140,19 @@ def create_reddit_csv(subreddit_name= "wallstreetbets", csv_name="reddit.csv", l
 
     # Convert the 'created' column to datetime format
     df['timestamp'] = pd.to_datetime(df['created'], unit='s')
+    
+    # Fill all the NaN values in the body column with an empty string
+    df['body'] = df['body'].fillna('')
+    
+    # Combine the title and bodyy into a single column text, separated by two newlines
+    df['text'] = df['title'] + '\n\n' + df['body']
+    
+    # drop the body column 
+    df = df.drop(columns=['body'])
 
     # Export the DataFrame to a CSV file
     df.to_csv(csv_name, index=False)
     
 
-if __name__ == "__main__":
-    create_reddit_csv()
+# if __name__ == "__main__":
+#     create_reddit_csv()
