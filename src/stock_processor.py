@@ -1,6 +1,6 @@
 """
 stock_identifier.py
-    This script contains functions pertaining to stock identification.
+This script contains functions pertaining to stock identification.
 
 @author: Cedric Lam 
 @author: Hair Parra
@@ -12,11 +12,12 @@ stock_identifier.py
 
 from typing import List, Dict  
 from pandas import DataFrame 
+import pandas as pd
 from typing import List, Dict  # Import typing for type annotations
-
+from time import sleep
 from datetime import datetime, timedelta
 from yahoo_fin import stock_info as si  # Yahoo_fin for fetching stock information
-
+import os
 import re 
 
 
@@ -41,7 +42,7 @@ def convert_market_cap_to_number(market_cap_str: str) -> float:
         return float(market_cap_str)
 
 
-def get_ticker_historical(ticker: str, start_date: str, end_date: str, interval: str = "1d") -> DataFrame:
+def get_ticker_historical(ticker: str, start_date: str, end_date: str, interval: str = "1d", local=False) -> DataFrame:
     """
     Fetches historical data for a given ticker within the specified date range.
     
@@ -54,11 +55,20 @@ def get_ticker_historical(ticker: str, start_date: str, end_date: str, interval:
     Returns:
     - DataFrame: Historical data for the given ticker.
     """
-    data: DataFrame = si.get_data(ticker, start_date - timedelta(days=1), end_date, interval=interval)
+    start_date = datetime.strptime(start_date, "%Y-%m-%d")
+    end_date = datetime.strptime(end_date, "%Y-%m-%d")
+    if local and os.path.exists("temp/" + ticker + ".csv"):
+        data_path = "temp/data/" + ticker + ".csv"
+        data = pd.read_csv(data_path)
+        data.index = pd.to_datetime(data.index)
+        data = data.loc[start_date:end_date]
+        
+    else:
+        data: DataFrame = si.get_data(ticker, start_date - timedelta(days=1), end_date, interval=interval)
     data.drop(columns=['ticker'], inplace=True)  # Drop the ticker column
     return data
 
-def get_technical_indicators(ticker: str, date_timestamp: int,  short_ma_days = 10, long_ma_days = 50, ma_tolerance=0.005) -> Dict[str, float]:
+def get_technical_indicators(ticker: str, date_timestamp: int,  short_ma_days = 10, long_ma_days = 50, ma_tolerance=0.005, local=False) -> Dict[str, float]:
     """
     Calculate the technical indicators of a given ticker for a specified time period ending at a given date.
     
@@ -76,7 +86,7 @@ def get_technical_indicators(ticker: str, date_timestamp: int,  short_ma_days = 
     start_date = end_date - timedelta(days=long_ma_days)
     
     # Fetch historical data for the ticker
-    ticker_data = get_ticker_historical(ticker, start_date=start_date, end_date=end_date)
+    ticker_data = get_ticker_historical(ticker, start_date=start_date, end_date=end_date, local=local)
     
     # Calculate the technical indicators
     technical_indicators = {}
@@ -177,22 +187,6 @@ def extract_tickers(text: str, minimum_market_cap: float = 1e10) -> List[str]:
             
     return list(set(valid_tickers)) # Return unique tickers
 
-def get_ticker_historical(ticker: str, start_date: str, end_date: str, interval: str = "1d") -> DataFrame:
-    """
-    Fetches historical data for a given ticker within the specified date range.
-    
-    Parameters:
-    - ticker (str): The ticker symbol.
-    - start_date (str): Start date in format YYYY-MM-DD.
-    - end_date (str): End date in format YYYY-MM-DD.
-    - interval (str, optional): Data interval (e.g., "1d" for daily). Defaults to "1d".
-    
-    Returns:
-    - DataFrame: Historical data for the given ticker.
-    """
-    data: DataFrame = si.get_data(ticker, start_date - timedelta(days=1), end_date, interval=interval)
-    data.drop(columns=['ticker'], inplace=True)  # Drop the ticker column
-    return data
 
 def get_past_average_return(tickers: List[str], date_timestamp: int, delta: str) -> float:
     """
@@ -262,3 +256,4 @@ def get_technical_indicators_fromlist(tickers: List[str], date_timestamp: int,  
         return "bullish"
     else:
         return "neutral"
+
