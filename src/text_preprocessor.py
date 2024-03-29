@@ -124,3 +124,11 @@ def clean_lda_text(texts: Union[str, List[str], pd.Series], clean_emojis: bool =
                      for doc in cleaned_texts]
 
     return cleaned_texts
+
+
+
+###############################################
+### 4. Sentiment & Trend Text Preprocessing ###
+###############################################
+
+
