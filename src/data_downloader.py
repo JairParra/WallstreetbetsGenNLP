@@ -108,6 +108,7 @@ def main(text_list,) -> None:
     tickers = get_all_tickers(text_list)
     download_all(tickers)
     print("Downloaded all data")
-if __name__ == "__main__":
-    text_list = ["AAPL is a great company", "I think TSLA is overvalued", "AMZN has a strong balance sheet"]
-    main(text_list)
+    
+# if __name__ == "__main__":
+#     text_list = ["AAPL is a great company", "I think TSLA is overvalued", "AMZN has a strong balance sheet"]
+#     main(text_list)

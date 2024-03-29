@@ -10,20 +10,27 @@ This script contains functions pertaining to stock identification.
 ### 1. Imports ###
 ##################
 
-from typing import List, Dict  
-from pandas import DataFrame 
-import pandas as pd
-from typing import List, Dict  # Import typing for type annotations
-from time import sleep
-from datetime import datetime, timedelta
-from yahoo_fin import stock_info as si  # Yahoo_fin for fetching stock information
+# general 
 import os
 import re 
+import warnings
+from time import sleep
+from typing import List, Dict
+from datetime import datetime, timedelta
+from yahoo_fin import stock_info as si
+
+# data science 
+import pandas as pd
+from pandas import DataFrame
+
+# Filter out FutureWarnings
+warnings.filterwarnings('ignore', category=FutureWarning)
 
 
 ##########################
 ### 2. Utils Functions ###
 ##########################
+
 def convert_market_cap_to_number(market_cap_str: str) -> float:
     """
     Convert a market capitalization string to a numeric value in dollars.
@@ -104,8 +111,6 @@ def get_technical_indicators(ticker: str, date_timestamp: int,  short_ma_days = 
     else:
         technical_indicators['moving_average'] = 'neutral'
         
-        
-    
     
     # Calculate the relative strength index (RSI)
     delta = ticker_data.tail(14)['adjclose'].diff()
@@ -258,4 +263,4 @@ def get_technical_indicators_fromlist(tickers: List[str], date_timestamp: int,  
     else:
         return "neutral"
 
-print(get_ticker_historical("AAPL", "2021-01-01", "2021-12-31", local=True))
+# print(get_ticker_historical("AAPL", "2021-01-01", "2021-12-31", local=True))

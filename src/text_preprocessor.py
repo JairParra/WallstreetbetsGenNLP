@@ -54,15 +54,8 @@ import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 
-###################### 
-### 2. Local Utils ###
-######################
-
-# Utils used for multiple functions in this script
-
-
 #################################
-### 3. LDA Text Preprocessing ###
+### 3. Text Preprocessing ###
 #################################
 
 def clean_lda_text(texts: Union[str, List[str], pd.Series], clean_emojis: bool = False, verbose:bool = False) -> Union[str, List[str]]:

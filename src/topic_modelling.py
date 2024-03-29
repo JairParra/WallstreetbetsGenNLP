@@ -270,9 +270,8 @@ def create_topics_df(texts: List[str], lda_model: LdaModel) -> pd.DataFrame:
     # Create a list of records using list comprehensions
     records = [{
         'doc_text': doc_text,
-        'most_likely_topic': topics_i[0][0],
-        'probability': topics_i[0][1],
-        'topics': [tup[0] for tup in topics_i]
+        'top1_topic': topics_i[0][0],
+        'prob_top1': topics_i[0][1]
     } for doc_text, topics_i in zip(texts, assigned_topics)]
 
     # Create a dataframe from the records

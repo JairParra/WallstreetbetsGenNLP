@@ -10,6 +10,7 @@ main.py
 ##################
 
 # general 
+import time
 import pprint 
 import warnings 
 
@@ -23,11 +24,14 @@ import nltk
 # custom utils 
 from src.utils import load_data_from_zip
 from src.data_extractor import create_reddit_csv
-from src.text_preprocessor import clean_lda_text 
+from src.text_preprocessor import clean_lda_text
+ 
 from src.topic_modelling import train_lda_model 
 from src.topic_modelling import load_lda_model
 from src.topic_modelling import extract_top_words
 from src.topic_modelling import create_topics_df
+
+from src.stock_processor import extract_tickers
 
 # supress all warnings from praw 
 warnings.filterwarnings('ignore', module='praw')
@@ -130,15 +134,37 @@ if __name__ == '__main__':
     }
     
     # Assign topics to the texts
-    df_assigned_topics = create_topics_df(df['text'], lda_model).drop(columns=["doc_text", "topics"])
+    df_assigned_topics = create_topics_df(df['text'], lda_model).drop(columns=["doc_text"])
     print(df_assigned_topics)
     
     # Left join the assigned topics to the original dataframe
     df_join = df.merge(df_assigned_topics, left_index=True, right_index=True)
     
+    #############################
+    ### 3. Sentiment Analysis ###
+    #############################
     
     
-        
+    #########################
+    ### 4. Trend Analysis ###
+    #########################
+    
+    
+    #########################
+    ### 5. Stock Analysis ###
+    #########################
+    
+    # apply the extracT_tickers function to one of the texts on the list 
+    sample_tickers = extract_tickers(df_join['text'][0])
+
+    # extract the tickers from all the texts in the df_join and store them in a new column
+    start_time = time.time()
+
+    df_join['tickers'] = df_join['text'].apply(extract_tickers)
+
+    end_time = time.time()
+    execution_time = end_time - start_time
+    print(f"Execution time: {execution_time} seconds")
     
 
 
