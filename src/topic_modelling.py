@@ -43,14 +43,13 @@ from gensim.models import LdaModel
 from gensim.models.callbacks import PerplexityMetric
 from gensim.models.phrases import ENGLISH_CONNECTOR_WORDS
 
+# Custom Modules
+from src.text_preprocessor import clean_lda_text
+
 # Dedicated NLP Visualizations 
 import pyLDAvis
 import pyLDAvis.gensim
 from wordcloud import WordCloud
-
-# Custom scripts 
-from src.utils import format_topics_sentences
-from src.utils import plot_topic_keywords
 
 # Configurations 
 nltk.download('stopwords', quiet=True)
@@ -79,8 +78,8 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 def train_lda_model(clean_texts: List[List[str]], 
                     save_model: bool = False, 
                     lda_params:dict = None) -> Tuple[gensim.models.ldamodel.LdaModel, 
-                                                                                     List[List[Tuple[int, float]]], 
-                                                                                     gensim.corpora.Dictionary]:
+                                                    List[List[Tuple[int, float]]], 
+                                                    gensim.corpora.Dictionary]:
     """
     Train an LDA model on a list of cleaned text documents.
 
@@ -233,7 +232,7 @@ def assign_topic(raw_text: str, lda_model: LdaModel, return_all: bool = False, v
         Union[Tuple[int, float], List[Tuple[int, float]]]: The most likely topic and its probability, or a list of all topics and their probabilities.
     """
     # Preprocess the raw text
-    cleaned_text = clean_text([raw_text], clean_emojis=True, verbose=False)[0]
+    cleaned_text = clean_lda_text([raw_text], clean_emojis=True, verbose=False)[0]
 
     # Show text before and after cleaning
     if verbose:
@@ -274,10 +273,13 @@ def create_topics_df(texts: List[str], lda_model: LdaModel) -> pd.DataFrame:
         'most_likely_topic': topics_i[0][0],
         'probability': topics_i[0][1],
         'topics': [tup[0] for tup in topics_i]
-    } for doc_text, topics_i in zip(df['text'].iloc[:10], assigned_topics)]
+    } for doc_text, topics_i in zip(texts, assigned_topics)]
 
     # Create a dataframe from the records
     df_assigned_topics = pd.DataFrame(records)
+    
+    # Add an index column to be able to join 
+    df_assigned_topics["index"] = list(range(len(df_assigned_topics)))
     
     return df_assigned_topics
 

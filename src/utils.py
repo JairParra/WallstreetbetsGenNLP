@@ -10,7 +10,6 @@ utils.py
 ##################
 
 # general
-import io
 import os 
 import sys
 import zipfile 
@@ -18,7 +17,6 @@ import pandas as pd
 from tqdm import tqdm
 from collections import Counter
 from contextlib import contextmanager
-
 
 # visualization 
 import matplotlib.pyplot as plt
@@ -75,8 +73,6 @@ def suppress_stdout():
             yield
         finally:
             sys.stdout = old_stdout
-
-
 
 ##########################
 ### 3. Sentiment Utils ###
