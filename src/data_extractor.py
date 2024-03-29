@@ -14,11 +14,19 @@ import pandas as pd
 import re  # Regular expressions library for matching ticker patterns
 from yahoo_fin import stock_info as si  # Yahoo_fin for fetching stock information
 from time import sleep  # sleep to pause execution between API requests
-from typing import List, Dict, Any  # Import typing for type annotations
+from typing import List, Dict  # Import typing for type annotations
+
 
 ##########################
 ### 2. Utils Functions ###
 ##########################
+# Create a Reddit instance
+reddit = praw.Reddit(
+        client_id="YnmRgUfHOn5foh17UNLsrA",
+        client_secret="EcvOf0J1NWVyuF3PTmxGkAAiuqQLkw",
+        user_agent="testscript by /u/tailinks",
+    )
+    
 def convert_market_cap_to_number(market_cap_str: str) -> float:
     """
     Convert a market capitalization string to a numeric value in dollars.
@@ -37,6 +45,41 @@ def convert_market_cap_to_number(market_cap_str: str) -> float:
         return float(market_cap_str)
 
 
+def get_post_body(submission):
+    """
+    Extracts the body of a Reddit post.
+    
+    Parameters:
+    - submission: A Reddit submission object.
+    
+    Returns:
+    - str: The body of the Reddit post.
+    """
+    if submission.is_self:
+        return submission.selftext
+    else:
+        return ""
+
+def add_body_column(df):
+    """
+    Adds a new column called 'body' to the DataFrame and populates it with the body of each Reddit post.
+    
+    Parameters:
+    - df (DataFrame): The DataFrame containing the Reddit post data.
+    
+    Returns:
+    - DataFrame: The modified DataFrame with the 'body' column added.
+    """
+    df['body'] = ""  # Initialize the 'body' column
+    
+    for index, row in df.iterrows():
+        submission = reddit.submission(id=row['id'])
+        body = get_post_body(submission)
+        df.at[index, 'body'] = body
+        sleep(0.2)  # Pause for 0.1 seconds
+        
+    return df
+    
 #########################
 ### 3. Core Functions ###
 #########################
@@ -52,12 +95,6 @@ def create_reddit_csv(subreddit_name= "wallstreetbets", csv_name="reddit.csv")->
         None
     """
 
-    # Create a Reddit instance
-    reddit = praw.Reddit(
-        client_id="YnmRgUfHOn5foh17UNLsrA",
-        client_secret="EcvOf0J1NWVyuF3PTmxGkAAiuqQLkw",
-        user_agent="testscript by /u/tailinks",
-    )
 
     # List to store submission data
     data = []
@@ -70,7 +107,7 @@ def create_reddit_csv(subreddit_name= "wallstreetbets", csv_name="reddit.csv")->
             "score": submission.score,
             "id": submission.id,
             "url": submission.url,
-            "num_comments": submission.num_comments,
+            "comms_num": submission.num_comments,
             "created": submission.created,
         }
         # Append the submission data to the list
@@ -82,7 +119,7 @@ def create_reddit_csv(subreddit_name= "wallstreetbets", csv_name="reddit.csv")->
             "score": submission.score,
             "id": submission.id,
             "url": submission.url,
-            "num_comments": submission.num_comments,
+            "comms_num": submission.num_comments,
             "created": submission.created,
         }
         # Append the submission data to the list
@@ -94,7 +131,7 @@ def create_reddit_csv(subreddit_name= "wallstreetbets", csv_name="reddit.csv")->
             "score": submission.score,
             "id": submission.id,
             "url": submission.url,
-            "num_comments": submission.num_comments,
+            "comms_num": submission.num_comments,
             "created": submission.created,
         }
         # Append the submission data to the list
@@ -102,6 +139,7 @@ def create_reddit_csv(subreddit_name= "wallstreetbets", csv_name="reddit.csv")->
     # Create a DataFrame from the data
     df = pd.DataFrame(data)
     df.drop_duplicates(subset=['id'], inplace=True)
+    df = add_body_column(df)
 
     # Convert the 'created' column to datetime format
     df['timestamp'] = pd.to_datetime(df['created'], unit='s')
@@ -159,3 +197,6 @@ def get_ticker_historical(ticker: str, start_date: str, end_date: str, interval:
     data['return'] = data['adjclose'].pct_change()  # Calculate returns
     data.drop(columns=['ticker'], inplace=True)  # Drop the ticker column
     return data
+
+if __name__ == "__main__":
+    create_reddit_csv()
