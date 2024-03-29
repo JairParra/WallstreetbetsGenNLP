@@ -101,7 +101,7 @@ def get_all_tickers(text_list,) ->List[str]:
 def download_all(tickers,) -> None:
     for ticker in tickers:
         data = si.get_data(ticker, start_date=datetime.now() - timedelta(days=2000), end_date=datetime.now(), interval="1d")
-        data.to_csv("src/temp/" + ticker + ".csv")
+        data.to_csv("data/temp/" + ticker + ".csv", index=True, index_label="date")
         print(f"Downloaded {ticker} data")
         
 def main(text_list,) -> None:

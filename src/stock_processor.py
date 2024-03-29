@@ -57,10 +57,11 @@ def get_ticker_historical(ticker: str, start_date: str, end_date: str, interval:
     """
     start_date = datetime.strptime(start_date, "%Y-%m-%d")
     end_date = datetime.strptime(end_date, "%Y-%m-%d")
-    if local and os.path.exists("temp/" + ticker + ".csv"):
-        data_path = "temp/data/" + ticker + ".csv"
+    if local and os.path.exists("data/temp/" + ticker + ".csv"):
+        data_path = "data/temp/" + ticker + ".csv"
         data = pd.read_csv(data_path)
-        data.index = pd.to_datetime(data.index)
+        data['date'] = pd.to_datetime(data['date'])
+        data.set_index('date', inplace=True)
         data = data.loc[start_date:end_date]
         
     else:
@@ -257,3 +258,4 @@ def get_technical_indicators_fromlist(tickers: List[str], date_timestamp: int,  
     else:
         return "neutral"
 
+print(get_ticker_historical("AAPL", "2021-01-01", "2021-12-31", local=True))
