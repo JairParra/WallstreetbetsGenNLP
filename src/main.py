@@ -16,9 +16,13 @@ import warnings
 import os 
 import pandas as pd
 
+# natural language processing 
+import nltk 
+
 # custom utils 
-from src.data_extractor import create_reddit_csv
 from src.utils import load_data_from_zip
+from src.data_extractor import create_reddit_csv
+from src.text_preprocessor import clean_lda_text 
 
 # default configurations 
 LOAD_SAMPLE_DATA = False
@@ -40,8 +44,10 @@ if __name__ == '__main__':
 
     if LOAD_SAMPLE_DATA:
         print("1. Loading sample data...")
-        df = load_data_from_zip('data_raw/reddit_wsb.csv.zip')
-        print(df)
+        df_test = load_data_from_zip('data_raw/reddit_wsb.csv.zip')
+        print(df_test) 
+        
+    ### Option 2: Fetch data for run using the API 
     else: 
         # Create file temppath 
         datapath = os.path.join("data_temp", "reddit.csv")
@@ -51,10 +57,12 @@ if __name__ == '__main__':
     
         # Load the data from the data path
         df = pd.read_csv(datapath)
+        
+    #######################
+    ### 1. Data Loading ###
+    #######################
+    
 
-    ### Option 2: Fetch data from Reddit API
-
-    # TODO 
 
 
 
