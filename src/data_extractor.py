@@ -9,13 +9,23 @@ data_extractor.py
 ################## 
 ### 1. Imports ###
 ##################
-import praw
-import pandas as pd
-import re  # Regular expressions library for matching ticker patterns
-from yahoo_fin import stock_info as si  # Yahoo_fin for fetching stock information
+
+# General 
+import re 
+import praw 
+import warnings 
 from time import sleep  # sleep to pause execution between API requests
 from typing import List, Dict  # Import typing for type annotations
 
+# Data related 
+import pandas as pd
+from yahoo_fin import stock_info as si  # Yahoo_fin for fetching stock information
+
+# Custom 
+from src.utils import suppress_stdout
+
+# Suppress warnings from the praw package
+warnings.filterwarnings("ignore", module="praw")
 
 ##########################
 ### 2. Utils Functions ###
@@ -26,6 +36,7 @@ reddit = praw.Reddit(
         client_secret="EcvOf0J1NWVyuF3PTmxGkAAiuqQLkw",
         user_agent="testscript by /u/tailinks",
     )
+
     
 def convert_market_cap_to_number(market_cap_str: str) -> float:
     """
@@ -98,43 +109,45 @@ def create_reddit_csv(subreddit_name= "wallstreetbets", csv_name="reddit.csv", l
     # List to store submission data
     data = []
 
-    # Fetch the top submissions from the "wallstreetbets" subreddit
-    for submission in reddit.subreddit(subreddit_name).top(limit=limit):
-        # Create a dictionary to store the submission data
-        submission_data = {
-            "title": submission.title,
-            "score": submission.score,
-            "id": submission.id,
-            "url": submission.url,
-            "comms_num": submission.num_comments,
-            "created": submission.created,
-        }
-        # Append the submission data to the list
-        data.append(submission_data)
-    for submission in reddit.subreddit(subreddit_name).hot(limit=limit):
-        # Create a dictionary to store the submission data
-        submission_data = {
-            "title": submission.title,
-            "score": submission.score,
-            "id": submission.id,
-            "url": submission.url,
-            "comms_num": submission.num_comments,
-            "created": submission.created,
-        }
-        # Append the submission data to the list
-        data.append(submission_data)
-    for submission in reddit.subreddit(subreddit_name).new(limit=limit):
-        # Create a dictionary to store the submission data
-        submission_data = {
-            "title": submission.title,
-            "score": submission.score,
-            "id": submission.id,
-            "url": submission.url,
-            "comms_num": submission.num_comments,
-            "created": submission.created,
-        }
-        # Append the submission data to the list
-        data.append(submission_data)
+    with suppress_stdout():
+        # Fetch the top submissions from the "wallstreetbets" subreddit
+        for submission in reddit.subreddit(subreddit_name).top(limit=limit):
+            # Create a dictionary to store the submission data
+            submission_data = {
+                "title": submission.title,
+                "score": submission.score,
+                "id": submission.id,
+                "url": submission.url,
+                "comms_num": submission.num_comments,
+                "created": submission.created,
+            }
+            # Append the submission data to the list
+            data.append(submission_data)
+        for submission in reddit.subreddit(subreddit_name).hot(limit=limit):
+            # Create a dictionary to store the submission data
+            submission_data = {
+                "title": submission.title,
+                "score": submission.score,
+                "id": submission.id,
+                "url": submission.url,
+                "comms_num": submission.num_comments,
+                "created": submission.created,
+            }
+            # Append the submission data to the list
+            data.append(submission_data)
+        for submission in reddit.subreddit(subreddit_name).new(limit=limit):
+            # Create a dictionary to store the submission data
+            submission_data = {
+                "title": submission.title,
+                "score": submission.score,
+                "id": submission.id,
+                "url": submission.url,
+                "comms_num": submission.num_comments,
+                "created": submission.created,
+            }
+            # Append the submission data to the list
+            data.append(submission_data)
+            
     # Create a DataFrame from the data
     df = pd.DataFrame(data)
     df.drop_duplicates(subset=['id'], inplace=True)
@@ -145,6 +158,7 @@ def create_reddit_csv(subreddit_name= "wallstreetbets", csv_name="reddit.csv", l
 
     # Export the DataFrame to a CSV file
     df.to_csv(csv_name, index=False)
+    
 
 def extract_tickers(text: str, minimum_market_cap: float = 1e10) -> List[str]:
     """
