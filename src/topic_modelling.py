@@ -43,6 +43,9 @@ from gensim.models import LdaModel
 from gensim.models.callbacks import PerplexityMetric
 from gensim.models.phrases import ENGLISH_CONNECTOR_WORDS
 
+# Custom Modules
+from src.text_preprocessor import clean_lda_text
+
 # Dedicated NLP Visualizations 
 import pyLDAvis
 import pyLDAvis.gensim
@@ -75,8 +78,8 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 def train_lda_model(clean_texts: List[List[str]], 
                     save_model: bool = False, 
                     lda_params:dict = None) -> Tuple[gensim.models.ldamodel.LdaModel, 
-                                                                                     List[List[Tuple[int, float]]], 
-                                                                                     gensim.corpora.Dictionary]:
+                                                    List[List[Tuple[int, float]]], 
+                                                    gensim.corpora.Dictionary]:
     """
     Train an LDA model on a list of cleaned text documents.
 
@@ -229,7 +232,7 @@ def assign_topic(raw_text: str, lda_model: LdaModel, return_all: bool = False, v
         Union[Tuple[int, float], List[Tuple[int, float]]]: The most likely topic and its probability, or a list of all topics and their probabilities.
     """
     # Preprocess the raw text
-    cleaned_text = clean_text([raw_text], clean_emojis=True, verbose=False)[0]
+    cleaned_text = clean_lda_text([raw_text], clean_emojis=True, verbose=False)[0]
 
     # Show text before and after cleaning
     if verbose:
@@ -274,6 +277,9 @@ def create_topics_df(texts: List[str], lda_model: LdaModel) -> pd.DataFrame:
 
     # Create a dataframe from the records
     df_assigned_topics = pd.DataFrame(records)
+    
+    # Add an index column to be able to join 
+    df_assigned_topics["index"] = list(range(len(df_assigned_topics)))
     
     return df_assigned_topics
 
