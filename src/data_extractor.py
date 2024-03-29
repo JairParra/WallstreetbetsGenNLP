@@ -83,7 +83,7 @@ def add_body_column(df):
 #########################
 ### 3. Core Functions ###
 #########################
-def create_reddit_csv(subreddit_name= "wallstreetbets", csv_name="reddit.csv")-> None: 
+def create_reddit_csv(subreddit_name= "wallstreetbets", csv_name="reddit.csv", limit=1000)-> None: 
     """
     Fetches data from the specified subreddit and saves it to a CSV file.
 
@@ -95,12 +95,11 @@ def create_reddit_csv(subreddit_name= "wallstreetbets", csv_name="reddit.csv")->
         None
     """
 
-
     # List to store submission data
     data = []
 
     # Fetch the top submissions from the "wallstreetbets" subreddit
-    for submission in reddit.subreddit(subreddit_name).top(limit=1000):
+    for submission in reddit.subreddit(subreddit_name).top(limit=limit):
         # Create a dictionary to store the submission data
         submission_data = {
             "title": submission.title,
@@ -112,7 +111,7 @@ def create_reddit_csv(subreddit_name= "wallstreetbets", csv_name="reddit.csv")->
         }
         # Append the submission data to the list
         data.append(submission_data)
-    for submission in reddit.subreddit(subreddit_name).hot(limit=1000):
+    for submission in reddit.subreddit(subreddit_name).hot(limit=limit):
         # Create a dictionary to store the submission data
         submission_data = {
             "title": submission.title,
@@ -124,7 +123,7 @@ def create_reddit_csv(subreddit_name= "wallstreetbets", csv_name="reddit.csv")->
         }
         # Append the submission data to the list
         data.append(submission_data)
-    for submission in reddit.subreddit(subreddit_name).new(limit=1000):
+    for submission in reddit.subreddit(subreddit_name).new(limit=limit):
         # Create a dictionary to store the submission data
         submission_data = {
             "title": submission.title,
