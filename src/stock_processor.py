@@ -17,6 +17,7 @@ import warnings
 from time import sleep
 from typing import List, Dict
 from datetime import datetime, timedelta
+from fuzzywuzzy import fuzz
 from yahoo_fin import stock_info as si
 
 # data science 
@@ -160,30 +161,46 @@ def get_technical_indicators(ticker: str, date_timestamp: int,  short_ma_days = 
 ### 3. Core Functions ###
 #########################
 
+import pandas as pd
+import re
+from typing import List
+from fuzzywuzzy import fuzz
+
 def extract_tickers(text: str, ticker_csv="data_raw/russell3000.csv") -> List[str]:
     """
-    Extracts and returns valid ticker symbols from a given text based on live price and market capitalization.
+    Extracts and returns valid ticker symbols from a given text. 
+    Now includes a check to add a ticker if a company name is present in the text with at least 90% similarity.
     
     Parameters:
     - text (str): The text to search for ticker symbols.
-    - minimum_market_cap (float, optional): The minimum market capitalization to consider a ticker valid. Defaults to 10 billion.
     
     Returns:
     - List[str]: A list of valid ticker symbols.
     """
+    ticker_df = pd.read_csv(ticker_csv)
+    tickers = list(ticker_df['Ticker'].str.upper())
+    # Removing common corporate suffixes to improve matching accuracy
+    names = [re.sub(r'\b(ltd\.|inc\.|corp\.|co\.|llc\.|plc\.|ltd|inc|corp|co|llc|plc)\b', '', name, flags=re.IGNORECASE).strip() for name in ticker_df['Name']]
+    name_to_ticker = {name.upper(): ticker for name, ticker in zip(names, tickers)}  # Creating a mapping from names to tickers
     
-    tickers = list(pd.read_csv(ticker_csv)['Ticker'])
     ticker_pattern: str = r'\b[A-Za-z]{2,6}\b'
-    potential_tickers: List[str] = re.findall(ticker_pattern, text)
+    potential_tickers: List[str] = re.findall(ticker_pattern, text.upper())  # Converting text to uppercase to match tickers format
+    
     valid_tickers: List[str] = []
     
     for ticker in potential_tickers:
-        ticker = ticker.upper()
         if ticker in tickers:
             valid_tickers.append(ticker)
-        
             
-    return list(set(valid_tickers)) # Return unique tickers
+    # Additional step to check for company names in the text and add corresponding ticker if similarity >= 90%
+    for name in names:
+        # Using partial_ratio to allow for partial matches within the text
+        if fuzz.partial_ratio(name.upper(), text.upper()) >= 90:
+            # Appending the ticker corresponding to the matched name
+            valid_tickers.append(name_to_ticker[name.upper()])
+    
+    return valid_tickers
+
 
 
 def get_past_average_return(tickers: List[str], date_timestamp: int, delta: str) -> float:
@@ -255,4 +272,3 @@ def get_technical_indicators_fromlist(tickers: List[str], date_timestamp: int,  
     else:
         return "neutral"
 
-# print(get_ticker_historical("AAPL", "2021-01-01", "2021-12-31", local=True))
