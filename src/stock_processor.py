@@ -160,7 +160,7 @@ def get_technical_indicators(ticker: str, date_timestamp: int,  short_ma_days = 
 ### 3. Core Functions ###
 #########################
 
-def extract_tickers(text: str, minimum_market_cap: float = 1e10) -> List[str]:
+def extract_tickers(text: str, ticker_csv="data_raw/russell3000.csv") -> List[str]:
     """
     Extracts and returns valid ticker symbols from a given text based on live price and market capitalization.
     
@@ -171,25 +171,17 @@ def extract_tickers(text: str, minimum_market_cap: float = 1e10) -> List[str]:
     Returns:
     - List[str]: A list of valid ticker symbols.
     """
+    
+    tickers = list(pd.read_csv(ticker_csv)['Ticker'])
     ticker_pattern: str = r'\b[A-Za-z]{2,6}\b'
     potential_tickers: List[str] = re.findall(ticker_pattern, text)
     valid_tickers: List[str] = []
     
     for ticker in potential_tickers:
         ticker = ticker.upper()
-        sleep(0.1)  # Pause to limit the frequency of API requests
-        try:
-            price: float = si.get_live_price(ticker)
-            if price > 0:
-                market_cap_str: DataFrame = si.get_stats_valuation(ticker)
-                market_cap_row: DataFrame = market_cap_str[market_cap_str[0] == "Market Cap (intraday)"]
-                if not market_cap_row.empty:
-                    market_cap_str: str = market_cap_row.iloc[0, 1]
-                    market_cap: float = convert_market_cap_to_number(market_cap_str)
-                    if market_cap >= minimum_market_cap:  # Ensure market cap meets minimum requirement
-                        valid_tickers.append(ticker)
-        except Exception as e:
-            pass
+        if ticker in tickers:
+            valid_tickers.append(ticker)
+        
             
     return list(set(valid_tickers)) # Return unique tickers
 
