@@ -30,6 +30,7 @@ reddit = praw.Reddit(
         client_id="YnmRgUfHOn5foh17UNLsrA",
         client_secret="EcvOf0J1NWVyuF3PTmxGkAAiuqQLkw",
         user_agent="testscript by /u/tailinks",
+        check_for_async=False,
     )
 
     
