@@ -12,3 +12,12 @@ tqdm
 wordcloud
 yahoo_fin
 yfinance
+fuzzywuzzy
+python-Levenshtein
+transformers
+datasets
+tensorflow
+tf-keras
+torch
+torchvision
+torchaudio

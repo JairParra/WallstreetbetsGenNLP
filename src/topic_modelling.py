@@ -43,6 +43,9 @@ from gensim.models import LdaModel
 from gensim.models.callbacks import PerplexityMetric
 from gensim.models.phrases import ENGLISH_CONNECTOR_WORDS
 
+# transformers 
+from transformers import pipeline
+
 # Custom Modules
 from src.text_preprocessor import clean_lda_text
 
@@ -70,6 +73,41 @@ pprint = pprint.PrettyPrinter(indent=4).pprint
 # Ignore warnings 
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
+
+################
+### 2. Utils ###
+#################
+
+def assign_topic(tokens: List[str], classifier) -> str:
+    """
+    Classifies the given tokens into a topic using a pretrained model.
+
+    Args:
+        tokens (list): A list of tokens representing the input text.
+        classifier: The pretrained model and tokenizer.
+
+    Returns:
+        str: The most likely topic for the given input text.
+
+    Raises:
+        None
+
+    Example:
+        >>> tokens = ["stock", "market", "investment"]
+        >>> classifier = pipeline("text-classification", model="distilbert-base-uncased")
+        >>> assign_topic(tokens, classifier)
+        'finance'
+    """
+    # Join tokens into a single string
+    text = " ".join(tokens)
+
+    # Classify the text and get the most likely topic
+    result = classifier(text)
+
+    # Extract the topic name
+    topic = result[0]['label']
+
+    return topic
 
 #########################
 ### 3. Model Training ###
@@ -252,13 +290,14 @@ def assign_topic(raw_text: str, lda_model: LdaModel, return_all: bool = False, v
 
 
 
-def create_topics_df(texts: List[str], lda_model: LdaModel) -> pd.DataFrame:
+def create_topics_df(texts: List[str], lda_model: LdaModel, topic_names:dict = None) -> pd.DataFrame:
     """
     Assign topics to a list of texts and create a dataframe with the assigned topics.
 
     Parameters:
         texts: A list of text documents.
         lda_model (LdaModel): The trained LDA model.
+        topic_names (dict): A dictionary mapping topic IDs to topic names. If None, default topic names will be used.
 
     Returns:
         A pandas DataFrame with the assigned topics for each text document.
@@ -270,8 +309,9 @@ def create_topics_df(texts: List[str], lda_model: LdaModel) -> pd.DataFrame:
     # Create a list of records using list comprehensions
     records = [{
         'doc_text': doc_text,
-        'top1_topic': topics_i[0][0],
-        'prob_top1': topics_i[0][1]
+        'topic_idx': topics_i[0][0],
+        'topic_prob': topics_i[0][1], 
+        'topic_name': topic_names[topics_i[0][0]] if topic_names is not None else None
     } for doc_text, topics_i in zip(texts, assigned_topics)]
 
     # Create a dataframe from the records

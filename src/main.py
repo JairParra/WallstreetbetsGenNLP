@@ -13,25 +13,44 @@ main.py
 import time
 import pprint 
 import warnings 
+from tqdm import tqdm
 
 # data science 
 import os 
+import numpy as np 
 import pandas as pd
+from scipy.special import expit
 
 # natural language processing 
-import nltk 
+from transformers import pipeline 
 
-# custom utils 
+# custom general utils
+from src.utils import hide_output
+from src.utils import measure_time
 from src.utils import load_data_from_zip
+
+# data & text processing
 from src.data_extractor import create_reddit_csv
 from src.text_preprocessor import clean_lda_text
  
+# topic modelling
 from src.topic_modelling import train_lda_model 
 from src.topic_modelling import load_lda_model
 from src.topic_modelling import extract_top_words
+from src.topic_modelling import assign_topic
 from src.topic_modelling import create_topics_df
 
+# stock identification 
 from src.stock_processor import extract_tickers
+
+# transformers 
+from transformers import AutoModelForSequenceClassification, AutoTokenizer
+
+#########################
+### 2. Configurations ###
+#########################
+
+### Configurations
 
 # supress all warnings from praw 
 warnings.filterwarnings('ignore', module='praw')
@@ -44,15 +63,48 @@ pd.options.display.max_columns = None
 
 # default configurations 
 LOAD_SAMPLE_DATA = False
-RETRAIN = False
+RETRAIN = True
 verbose = 1
 
+
+# declare base possible topic names 
+# later to be loaded from a local file
+candidate_topic_names = [
+    "Stock Market Analysis",
+    "Investment Strategies",
+    "Financial Growth and Valuation",
+    "Corporate Earnings and Revenue",
+    "Market Trends and Predictions",
+    "Social Media Trading",
+    "Retail Investor Sentiment",
+    "GameStop and Meme Stocks",
+    "Online Trading Platforms",
+    "Market Disruptions by Retail Investors",
+    "Technological Advancements",
+    "Emerging Industries",
+    "Product Innovation",
+    "Market Disruption",
+    "Strategic Partnerships and Contracts",
+    "Stock Trading Strategies",
+    "Market Volatility",
+    "Short Selling and Squeezes",
+    "Options Trading",
+    "Market Liquidity and Volume"
+]
+
 ############### 
-### 2. Main ###
+### 3. Main ###
 ###############
 
 if __name__ == '__main__':
     
+    #####################
+    ### 0. Preloaders ###
+    #####################
+    
+    # load pretrained zero-shot classification model
+    classifier = pipeline("zero-shot-classification", model="MoritzLaurer/DeBERTa-v3-base-mnli-fever-anli")
+        
     #######################
     ### 1. Data Loading ###
     #######################
@@ -61,19 +113,27 @@ if __name__ == '__main__':
 
     if LOAD_SAMPLE_DATA:
         print("1. Loading sample data...")
-        df_test = load_data_from_zip('data_raw/reddit_wsb.csv.zip').iloc[0:10]
-        print(df_test) 
+        df = load_data_from_zip('data_raw/reddit_wsb.csv.zip')
+        print(df) 
         
     ### Option 2: Fetch data for run using the API 
     else: 
+        print("*"*100 + "\n1. Fetching Reddit data...\n" + "*"*100)
+        
         # Create file temppath 
         datapath = os.path.join("data_temp", "reddit.csv")
         
         # Fetch data from the reddit API 
-        create_reddit_csv(subreddit_name= "wallstreetbets", csv_name=datapath, limit=10)
+        _ = measure_time(
+            hide_output(
+                 create_reddit_csv(subreddit_name="wallstreetbets", 
+                                   csv_name=datapath, limit=10)                   
+            )
+        )
     
         # Load the data from the data path
         df = pd.read_csv(datapath)
+        print(df)
         
 
     ##########################
@@ -81,7 +141,10 @@ if __name__ == '__main__':
     ##########################
     
     # Extract all the titles from the dataframe
-    texts = df['text'].tolist()  
+    if LOAD_SAMPLE_DATA: 
+        texts = df['text'].tolist().iloc[0:30]
+    else: 
+        texts = df['text'].tolist()  
     
     # Clean the corpus for this iteration
     clean_texts = clean_lda_text(texts, clean_emojis=True, verbose=True)
@@ -119,26 +182,33 @@ if __name__ == '__main__':
     # Extract top n words per topic
     top_words_dict = extract_top_words(lda_model, top_n=40)
     
-    if verbose >= 1:
-        # Print the top n words for each topic by contactenating them with comas 
-        for topic_id, top_words in top_words_dict.items():
-            print(f"Topic {topic_id}: {', '.join(top_words)}")
+    # initialize topic names dict
+    topic_names = {}
+    
+    # Assign a topic name for each of the topics 
+    for topic_id, top_words in tqdm(top_words_dict.items(), desc="Labeling topics..."):
         
-    # Logic to assign the actual topics 
-    # TODO: Implement a function to assign the actual topic names based on top_words_dict
-    topic_names = {
-        0: "Topic1",
-        1: "Topic2",
-        2: "Topic3",
-        3: "Topic4"
-    }
+        # Extract topic tokens into a single string 
+        toks_str = ' '.join(top_words)
+        
+        # assign the most likely label to these topics
+        topic_names[topic_id] = classifier(toks_str, 
+                                           candidate_topic_names, 
+                                           multi_label=False)['labels'][0]
+
+    # Print the topics and their top words
+    if verbose >= 1:
+        for topic_id, topic_label in topic_names.items():
+            print(f"Topic {topic_id}: {topic_label}")
+            print(f"First 5 words: {', '.join(top_words_dict[topic_id][:5])}")
+            print()
     
     # Assign topics to the texts
-    df_assigned_topics = create_topics_df(df['text'], lda_model).drop(columns=["doc_text"])
-    print(df_assigned_topics)
+    df_assigned_topics = create_topics_df(df['text'], lda_model, 
+                                          topic_names).drop(columns=["doc_text"])
     
     # Left join the assigned topics to the original dataframe
-    df_join = df.merge(df_assigned_topics, left_index=True, right_index=True)
+    df_join = df.merge(df_assigned_topics, on='index')
     
     #############################
     ### 3. Sentiment Analysis ###
@@ -154,7 +224,7 @@ if __name__ == '__main__':
     ### 5. Stock Analysis ###
     #########################
     
-    # apply the extracT_tickers function to one of the texts on the list 
+    # apply the extract_tickers function to one of the texts on the list 
     sample_tickers = extract_tickers(df_join['text'][0])
 
     # extract the tickers from all the texts in the df_join and store them in a new column
@@ -165,6 +235,7 @@ if __name__ == '__main__':
     end_time = time.time()
     execution_time = end_time - start_time
     print(f"Execution time: {execution_time} seconds")
+
     
 
 

@@ -18,15 +18,13 @@ from time import sleep  # sleep to pause execution between API requests
 # Data related 
 import pandas as pd
 
-# Custom 
-from src.utils import suppress_stdout
-
 # Suppress warnings from the praw package
 warnings.filterwarnings("ignore", module="praw")
 
 ##########################
 ### 2. Utils Functions ###
 ##########################
+
 # Create a Reddit instance
 reddit = praw.Reddit(
         client_id="YnmRgUfHOn5foh17UNLsrA",
@@ -35,7 +33,6 @@ reddit = praw.Reddit(
     )
 
     
-
 
 def get_post_body(submission):
     """
@@ -94,44 +91,43 @@ def create_reddit_csv(subreddit_name= "wallstreetbets", csv_name="reddit.csv", l
     # List to store submission data
     data = []
 
-    with suppress_stdout():
-        # Fetch the top submissions from the "wallstreetbets" subreddit
-        for submission in reddit.subreddit(subreddit_name).top(limit=limit):
-            # Create a dictionary to store the submission data
-            submission_data = {
-                "title": submission.title,
-                "score": submission.score,
-                "id": submission.id,
-                "url": submission.url,
-                "comms_num": submission.num_comments,
-                "created": submission.created,
-            }
-            # Append the submission data to the list
-            data.append(submission_data)
-        for submission in reddit.subreddit(subreddit_name).hot(limit=limit):
-            # Create a dictionary to store the submission data
-            submission_data = {
-                "title": submission.title,
-                "score": submission.score,
-                "id": submission.id,
-                "url": submission.url,
-                "comms_num": submission.num_comments,
-                "created": submission.created,
-            }
-            # Append the submission data to the list
-            data.append(submission_data)
-        for submission in reddit.subreddit(subreddit_name).new(limit=limit):
-            # Create a dictionary to store the submission data
-            submission_data = {
-                "title": submission.title,
-                "score": submission.score,
-                "id": submission.id,
-                "url": submission.url,
-                "comms_num": submission.num_comments,
-                "created": submission.created,
-            }
-            # Append the submission data to the list
-            data.append(submission_data)
+    # Fetch the top submissions from the "wallstreetbets" subreddit
+    for submission in reddit.subreddit(subreddit_name).top(limit=limit):
+        # Create a dictionary to store the submission data
+        submission_data = {
+            "title": submission.title,
+            "score": submission.score,
+            "id": submission.id,
+            "url": submission.url,
+            "comms_num": submission.num_comments,
+            "created": submission.created,
+        }
+        # Append the submission data to the list
+        data.append(submission_data)
+    for submission in reddit.subreddit(subreddit_name).hot(limit=limit):
+        # Create a dictionary to store the submission data
+        submission_data = {
+            "title": submission.title,
+            "score": submission.score,
+            "id": submission.id,
+            "url": submission.url,
+            "comms_num": submission.num_comments,
+            "created": submission.created,
+        }
+        # Append the submission data to the list
+        data.append(submission_data)
+    for submission in reddit.subreddit(subreddit_name).new(limit=limit):
+        # Create a dictionary to store the submission data
+        submission_data = {
+            "title": submission.title,
+            "score": submission.score,
+            "id": submission.id,
+            "url": submission.url,
+            "comms_num": submission.num_comments,
+            "created": submission.created,
+        }
+        # Append the submission data to the list
+        data.append(submission_data)
             
     # Create a DataFrame from the data
     df = pd.DataFrame(data)

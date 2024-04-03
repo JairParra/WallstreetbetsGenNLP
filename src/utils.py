@@ -12,6 +12,7 @@ utils.py
 # general
 import os 
 import sys
+import time
 import zipfile 
 import pandas as pd
 from tqdm import tqdm
@@ -63,16 +64,70 @@ def load_data_from_zip(zip_file_path:str = 'data_raw/reddit_wsb.csv.zip') -> pd.
 
     return df
 
-
 @contextmanager
-def suppress_stdout():
+def suppress_output():
+    """
+    A context manager that suppresses all output to IO and printing messages.
+    """
+    # Open a null file as the output stream
     with open(os.devnull, 'w') as devnull:
-        old_stdout = sys.stdout
+        # Replace the standard output and error streams with the null file
         sys.stdout = devnull
+        sys.stderr = devnull
         try:
+            # Yield control back to the caller
             yield
         finally:
-            sys.stdout = old_stdout
+            # Restore the standard output and error streams
+            sys.stdout = sys.__stdout__
+            sys.stderr = sys.__stderr__
+
+def hide_output(func):
+    """
+    A decorator function that hides all output to IO and printing messages from a given function.
+
+    Parameters:
+    - func: The function to be decorated.
+
+    Returns:
+    - result: The result of the function.
+
+    Usage:
+    - @hide_output
+        def my_function():
+            # code here
+            return result
+    """
+    def wrapper(*args, **kwargs):
+        with suppress_output():
+            result = func(*args, **kwargs)
+        return result
+    return wrapper
+
+def measure_time(func):
+    """
+    A decorator function that measures the execution time of a given function.
+
+    Parameters:
+    - func: The function to be measured.
+
+    Returns:
+    - result: The result of the function.
+
+    Usage:
+    - @measure_time
+      def my_function():
+          # code here
+          return result
+    """
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        result = func(*args, **kwargs)
+        end_time = time.time()
+        execution_time = end_time - start_time
+        print(f"Execution time: {execution_time} seconds")
+        return result
+    return wrapper
 
 ##########################
 ### 3. Sentiment Utils ###
