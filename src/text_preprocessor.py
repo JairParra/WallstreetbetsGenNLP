@@ -122,4 +122,27 @@ def clean_lda_text(texts: Union[str, List[str], pd.Series], clean_emojis: bool =
 ### 4. Sentiment & Trend Text Preprocessing ###
 ###############################################
 
+def preprocess_text(texts: Union[str, List[str], pd.Series], clean_emojis: bool = False) -> Union[str, List[str]]:
+    cleaned_texts = []
+
+    # Processing texts using Spacy pipeline
+    for doc in tqdm(nlp.pipe(texts, batch_size=20), total=len(texts), desc="Cleaning Texts"):
+
+        # Handle emojis: translate to text if not removing, else remove
+        if clean_emojis:
+            doc = re.sub(r':[^:]+:', '', demojize(doc.text))  # Remove emojis
+        else:
+            doc = demojize(doc.text)  # Convert emojis to text
+
+        # Tokenization and preprocessing
+        tokens = [token.text.lower() for token in nlp(doc) if token.text.isalpha()]
+
+        # Removing stopwords and short tokens
+        tokens = [token for token in tokens if token not in stop_words and len(token) > 1]
+
+        cleaned_texts.append(' '.join(tokens))  # Rejoin tokens into a string
+
+    return cleaned_texts
+
+
 
