@@ -1,5 +1,4 @@
 emoji
-en_core_web_sm
 gensim
 matplotlib
 nltk

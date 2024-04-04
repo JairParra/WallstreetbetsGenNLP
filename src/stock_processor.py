@@ -161,7 +161,7 @@ def get_technical_indicators(ticker: str, date_timestamp: int,  short_ma_days = 
 ### 3. Core Functions ###
 #########################
 
-import pandas as pd
+import pandas as pdA
 import re
 from typing import List
 from fuzzywuzzy import fuzz
@@ -179,6 +179,7 @@ def extract_tickers(text: str, ticker_csv="data_raw/russell3000.csv") -> List[st
     """
     ticker_df = pd.read_csv(ticker_csv)
     tickers = list(ticker_df['Ticker'].str.upper())
+
     # Removing common corporate suffixes to improve matching accuracy
     names = [re.sub(r'\b(ltd\.|inc\.|corp\.|co\.|llc\.|plc\.|ltd|inc|corp|co|llc|plc)\b', '', name, flags=re.IGNORECASE).strip() for name in ticker_df['Name']]
     name_to_ticker = {name.upper(): ticker for name, ticker in zip(names, tickers)}  # Creating a mapping from names to tickers
