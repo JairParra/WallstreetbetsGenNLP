@@ -224,9 +224,6 @@ if __name__ == '__main__':
     ### 5. Stock Analysis ###
     #########################
     
-    # apply the extract_tickers function to one of the texts on the list 
-    sample_tickers = extract_tickers(df_join['text'][0])
-
     # extract the tickers from all the texts in the df_join and store them in a new column
     start_time = time.time()
 
