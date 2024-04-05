@@ -132,6 +132,7 @@ def measure_time(func):
 ##########################
 ### 3. Sentiment Utils ###
 ##########################
+
 def extract_text(df):
     """
     This function takes a DataFrame and concatenates the 'title' and 'body' columns into a new 'text' column.

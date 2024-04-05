@@ -27,11 +27,14 @@ from transformers import pipeline
 # custom general utils
 from src.utils import hide_output
 from src.utils import measure_time
+from src.utils import extract_text
 from src.utils import load_data_from_zip
+from src.utils import load_words_from_csv
 
 # data & text processing
 from src.data_extractor import create_reddit_csv
 from src.text_preprocessor import clean_lda_text
+from src.text_preprocessor import clean_sentiment
  
 # topic modelling
 from src.topic_modelling import train_lda_model 
@@ -40,11 +43,17 @@ from src.topic_modelling import extract_top_words
 from src.topic_modelling import assign_topic
 from src.topic_modelling import create_topics_df
 
+# sentiment and trend analysis 
+from src.trend_analysis import analyze_emotion
+from src.sentiment_analysis import process_with_vader
+from src.sentiment_analysis import analyze_sentiment_vader
+
 # stock identification 
 from src.stock_processor import extract_tickers
 
 # transformers 
-from transformers import AutoModelForSequenceClassification, AutoTokenizer
+from transformers import AutoTokenizer
+from transformers import AutoModelForSequenceClassification
 
 #########################
 ### 2. Configurations ###
@@ -104,6 +113,10 @@ if __name__ == '__main__':
     
     # load pretrained zero-shot classification model
     classifier = pipeline("zero-shot-classification", model="MoritzLaurer/DeBERTa-v3-base-mnli-fever-anli")
+    
+    # Preload trend word lists
+    bullish_words = load_words_from_csv('data_raw/bearish.csv') # Bullish word list
+    bearish_words = load_words_from_csv('data_raw/bullish.csv') # Bearish word list
         
     #######################
     ### 1. Data Loading ###
@@ -149,6 +162,9 @@ if __name__ == '__main__':
     # Clean the corpus for this iteration
     clean_texts = clean_lda_text(texts, clean_emojis=True, verbose=True)
     
+    # no longer needed
+    del(texts)
+    
     if RETRAIN: 
         # Create a dictionary with the parameters used in the LDA model 
         lda_params = {
@@ -186,7 +202,7 @@ if __name__ == '__main__':
     topic_names = {}
     
     # Assign a topic name for each of the topics 
-    for topic_id, top_words in tqdm(top_words_dict.items(), desc="Labeling topics..."):
+    for topic_id, top_words in tqdm(top_words_dict.items(), desc="Deciding topic labels..."):
         
         # Extract topic tokens into a single string 
         toks_str = ' '.join(top_words)
@@ -205,7 +221,7 @@ if __name__ == '__main__':
     
     # Assign topics to the texts
     df_assigned_topics = create_topics_df(df['text'], lda_model, 
-                                          topic_names).drop(columns=["doc_text"])
+                                          topic_names).drop(columns=["doc_text"], desc="Labeling topics...")
     
     # Left join the assigned topics to the original dataframe
     df_join = df.merge(df_assigned_topics, on='index')
@@ -214,27 +230,36 @@ if __name__ == '__main__':
     ### 3. Sentiment Analysis ###
     #############################
     
+    # create a temporary column for sentiment analysis 
+    df_join["processed_text"] = clean_sentiment(df_join['text'], clean_emojis=True)
+    
+    # create a new column applying the preprocessing 
+    df_join = process_with_vader(df_join) # Sentiment analysis with vader
+    
+    # drop the temp column 
+    df_join.drop(columns=["processed_text"], inplace=True)
     
     #########################
     ### 4. Trend Analysis ###
     #########################
     
-    
+    # assign trend sentiment via lexiconds 
+    df_join['trend_sentiment'] = df_join['text'].apply(analyze_emotion) # analyzing the trending emotion
+
     #########################
     ### 5. Stock Analysis ###
     #########################
     
     # extract the tickers from all the texts in the df_join and store them in a new column
-    start_time = time.time()
-
-    df_join['tickers'] = df_join['text'].apply(extract_tickers)
-
-    end_time = time.time()
-    execution_time = end_time - start_time
-    print(f"Execution time: {execution_time} seconds")
-
+    df_join['tickers'] = df_join['text'].apply(extract_tickers, str_format=True)
     
+    
+    ######################
+    ### 6. Save Result ###
+    ######################
 
+    df_join.to_csv("data_clean/wsb_clean.csv")    
+    
 
 
 

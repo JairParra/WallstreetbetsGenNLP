@@ -15,7 +15,7 @@ import os
 import re 
 import warnings
 from time import sleep
-from typing import List, Dict
+from typing import List, Dict, Union
 from datetime import datetime, timedelta
 from fuzzywuzzy import fuzz
 from yahoo_fin import stock_info as si
@@ -166,7 +166,7 @@ import re
 from typing import List
 from fuzzywuzzy import fuzz
 
-def extract_tickers(text: str, ticker_csv="data_raw/russell3000.csv") -> List[str]:
+def extract_tickers(text: str, ticker_csv="data_raw/russell3000.csv", str_format:bool=False) -> Union[str, List[str]]:
     """
     Extracts and returns valid ticker symbols from a given text. 
     Now includes a check to add a ticker if a company name is present in the text with at least 90% similarity.
@@ -199,6 +199,10 @@ def extract_tickers(text: str, ticker_csv="data_raw/russell3000.csv") -> List[st
         if fuzz.partial_ratio(name.upper(), text.upper()) >= 90:
             # Appending the ticker corresponding to the matched name
             valid_tickers.append(name_to_ticker[name.upper()])
+            
+    # convert to string format if prompted 
+    if str_format:
+        return ", ".join(valid_tickers)
     
     return valid_tickers
 

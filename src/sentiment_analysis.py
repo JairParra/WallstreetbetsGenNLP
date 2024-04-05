@@ -12,6 +12,7 @@ sentiment_analysis.py
 
 # General Imports
 
+import os
 import re
 import zipfile 
 from tqdm.notebook import tqdm
@@ -28,7 +29,7 @@ import spacy
 from spacy.lang.en import English
 from spacy.lang.en.stop_words import STOP_WORDS as stop_words  # Import default English stop words
 
-nlp = spacy.load("en_core_web_sm", disable=["parser", "ner"])
+nlp = spacy.load("en_core_web_md", disable=["parser", "ner"])
 
 # Import NLTK
 import nltk

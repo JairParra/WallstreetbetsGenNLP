@@ -122,7 +122,7 @@ def clean_lda_text(texts: Union[str, List[str], pd.Series], clean_emojis: bool =
 ### 4. Sentiment & Trend Text Preprocessing ###
 ###############################################
 
-def preprocess_text(texts: Union[str, List[str], pd.Series], clean_emojis: bool = False) -> Union[str, List[str]]:
+def clean_sentiment(texts: Union[str, List[str], pd.Series], clean_emojis: bool = False) -> Union[str, List[str]]:
     cleaned_texts = []
 
     # Processing texts using Spacy pipeline

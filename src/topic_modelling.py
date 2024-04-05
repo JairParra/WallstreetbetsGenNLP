@@ -43,9 +43,6 @@ from gensim.models import LdaModel
 from gensim.models.callbacks import PerplexityMetric
 from gensim.models.phrases import ENGLISH_CONNECTOR_WORDS
 
-# transformers 
-from transformers import pipeline
-
 # Custom Modules
 from src.text_preprocessor import clean_lda_text
 

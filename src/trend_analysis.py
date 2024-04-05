@@ -27,6 +27,7 @@ import spacy
 from spacy.lang.en import English
 
 nlp = spacy.load("en_core_web_md", disable=["parser", "ner"])
+
 # Import NLTK
 import nltk
 from nltk.corpus import sentiwordnet as swn
@@ -44,6 +45,7 @@ nltk.download('wordnet')
 ##########################
 ### 2. Utils Functions ###
 ##########################
+
 #used same utils as sentiment, this is the only different function
 def load_words_from_csv(file_path):
     """
