@@ -221,7 +221,7 @@ if __name__ == '__main__':
     
     # Assign topics to the texts
     df_assigned_topics = create_topics_df(df['text'], lda_model, 
-                                          topic_names).drop(columns=["doc_text"], desc="Labeling topics...")
+                                          topic_names).drop(columns=["doc_text"])
     
     # Left join the assigned topics to the original dataframe
     df_join = df.merge(df_assigned_topics, on='index')
