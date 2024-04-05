@@ -1,74 +1,74 @@
 ,title,score,id,url,comms_num,created,timestamp,text,index,topic_idx,topic_prob,topic_name,sentiment_score,sentiment_label,trend_sentiment,tickers
-0,Times Square right now,484712,l8rf4k,https://v.redd.it/x64z70f7eie61,13964,1612029638.0,2021-01-30 18:00:38,"Times Square right now
+0,Times Square right now,484706,l8rf4k,https://v.redd.it/x64z70f7eie61,13964,1612029638.0,2021-01-30 18:00:38,"Times Square right now
 
-",0,1,0.81090736,Market Disruption,0.0,neutral,Neutral,NOW
-1,UPVOTE so everyone sees we got SUPPORT,337265,l6wu59,https://i.redd.it/sgoqy8nyt2e61.png,12875,1611841234.0,2021-01-28 13:40:34,"UPVOTE so everyone sees we got SUPPORT
+",0,3,0.61569595,Market Liquidity and Volume,0.0,neutral,Neutral,NOW
+1,UPVOTE so everyone sees we got SUPPORT,337260,l6wu59,https://i.redd.it/sgoqy8nyt2e61.png,12875,1611841234.0,2021-01-28 13:40:34,"UPVOTE so everyone sees we got SUPPORT
 
-",1,1,0.7498432,Market Disruption,0.4019,positive,Neutral,SO
-2,GME YOLO update — Jan 28 2021,298426,l78uct,https://i.redd.it/opzucppb15e61.png,23066,1611867983.0,2021-01-28 21:06:23,"GME YOLO update — Jan 28 2021
+",1,3,0.74989146,Market Liquidity and Volume,0.4019,positive,Neutral,SO
+2,GME YOLO update — Jan 28 2021,298417,l78uct,https://i.redd.it/opzucppb15e61.png,23066,1611867983.0,2021-01-28 21:06:23,"GME YOLO update — Jan 28 2021
 
-",2,2,0.42072755,Market Volatility,0.2732,positive,Neutral,GME
-3,GME YOLO month-end update — Jan 2021,263051,l846a1,https://i.redd.it/r557em3t5ce61.png,19959,1611954285.0,2021-01-29 21:04:45,"GME YOLO month-end update — Jan 2021
+",2,2,0.62489885,Market Liquidity and Volume,0.2732,positive,Neutral,GME
+3,GME YOLO month-end update — Jan 2021,263052,l846a1,https://i.redd.it/r557em3t5ce61.png,19959,1611954285.0,2021-01-29 21:04:45,"GME YOLO month-end update — Jan 2021
 
-",3,2,0.47082734,Market Volatility,0.2732,positive,Neutral,GME
-4,It’s treason then,245922,l881ia,https://i.redd.it/d3t66lv1yce61.jpg,4604,1611963659.0,2021-01-29 23:40:59,"It’s treason then
+",3,2,0.8493974,Market Liquidity and Volume,0.2732,positive,Neutral,GME
+4,It’s treason then,245920,l881ia,https://i.redd.it/d3t66lv1yce61.jpg,4604,1611963659.0,2021-01-29 23:40:59,"It’s treason then
 
-",4,0,0.25,Market Disruption,-0.4404,negative,Neutral,IT
-5,"CLASS ACTION AGAINST ROBINHOOD. Allowing people to only sell is the definition of market manipulation. A class action must be started, Robinhood has made plenty of money off selling info about our trades to the hedge funds to be able to pay out a little for causing people to loose money now",228010,l6x130,https://www.reddit.com/r/wallstreetbets/comments/l6x130/class_action_against_robinhood_allowing_people_to/,17900,1611841751.0,2021-01-28 13:49:11,"CLASS ACTION AGAINST ROBINHOOD. Allowing people to only sell is the definition of market manipulation. A class action must be started, Robinhood has made plenty of money off selling info about our trades to the hedge funds to be able to pay out a little for causing people to loose money now
+",4,2,0.6248416,Market Liquidity and Volume,-0.4404,negative,Neutral,IT
+5,"CLASS ACTION AGAINST ROBINHOOD. Allowing people to only sell is the definition of market manipulation. A class action must be started, Robinhood has made plenty of money off selling info about our trades to the hedge funds to be able to pay out a little for causing people to loose money now",228017,l6x130,https://www.reddit.com/r/wallstreetbets/comments/l6x130/class_action_against_robinhood_allowing_people_to/,17900,1611841751.0,2021-01-28 13:49:11,"CLASS ACTION AGAINST ROBINHOOD. Allowing people to only sell is the definition of market manipulation. A class action must be started, Robinhood has made plenty of money off selling info about our trades to the hedge funds to be able to pay out a little for causing people to loose money now
 
-LEAVE ROBINHOOD. They dont deserve to make money off us after the millions they caused in losses. It might take a couple of days, but send Robinhood to the ground and GME to the moon.",5,3,0.97651,Market Volatility,-0.7605,negative,Neutral,"BE, HAS, BE, OUT, FOR, NOW, IT, GME"
-6,GME YOLO update — Feb 19 2021,223072,lnqgz8,https://i.redd.it/2xswz0h11ii61.png,12915,1613768755.0,2021-02-19 21:05:55,"GME YOLO update — Feb 19 2021
+LEAVE ROBINHOOD. They dont deserve to make money off us after the millions they caused in losses. It might take a couple of days, but send Robinhood to the ground and GME to the moon.",5,1,0.37327173,Corporate Earnings and Revenue,-0.7605,negative,Neutral,"BE, HAS, BE, OUT, FOR, NOW, IT, GME"
+6,GME YOLO update — Feb 19 2021,223079,lnqgz8,https://i.redd.it/2xswz0h11ii61.png,12915,1613768755.0,2021-02-19 21:05:55,"GME YOLO update — Feb 19 2021
 
-",6,3,0.81033593,Market Volatility,0.2732,positive,Neutral,GME
-7,GME YOLO update — Jan 27 2021 --------------------------------------- guess i need 102 characters in title now,217302,l6ekdz,https://i.redd.it/a309gkm5yxd61.png,14691,1611782135.0,2021-01-27 21:15:35,"GME YOLO update — Jan 27 2021 --------------------------------------- guess i need 102 characters in title now
+",6,2,0.74993503,Market Liquidity and Volume,0.2732,positive,Neutral,GME
+7,GME YOLO update — Jan 27 2021 --------------------------------------- guess i need 102 characters in title now,217294,l6ekdz,https://i.redd.it/a309gkm5yxd61.png,14691,1611782135.0,2021-01-27 21:15:35,"GME YOLO update — Jan 27 2021 --------------------------------------- guess i need 102 characters in title now
 
-",7,2,0.69094175,Market Volatility,0.2732,positive,Neutral,"GME, NOW, GES"
+",7,2,0.8499597,Market Liquidity and Volume,0.2732,positive,Neutral,"GME, NOW, GES"
 8,GME YOLO update — Feb 1 2021,216120,lae6j0,https://i.redd.it/og8ca1xskxe61.png,18121,1612213656.0,2021-02-01 21:07:36,"GME YOLO update — Feb 1 2021
 
-",8,3,0.810348,Market Volatility,0.2732,positive,Neutral,GME
-9,IT'S POWER TO THE TRADERS NOW,215849,l7feld,https://v.redd.it/lu8aekujd6e61,5653,1611884158.0,2021-01-29 01:35:58,"IT'S POWER TO THE TRADERS NOW
+",8,2,0.74993503,Market Liquidity and Volume,0.2732,positive,Neutral,GME
+9,IT'S POWER TO THE TRADERS NOW,215848,l7feld,https://v.redd.it/lu8aekujd6e61,5653,1611884158.0,2021-01-29 01:35:58,"IT'S POWER TO THE TRADERS NOW
 
-",9,0,0.74988043,Market Disruption,0.0,neutral,Neutral,"IT, NOW"
-10,"What Are Your Moves Tomorrow, April 5, 2024",337,1bvx5c8,https://www.reddit.com/r/wallstreetbets/comments/1bvx5c8/what_are_your_moves_tomorrow_april_5_2024/,6498,1712260818.0,2024-04-04 20:00:18,"What Are Your Moves Tomorrow, April 5, 2024
+",9,0,0.74976254,Market Disruption,0.0,neutral,Neutral,"IT, NOW"
+10,"What Are Your Moves Tomorrow, April 5, 2024",348,1bvx5c8,https://www.reddit.com/r/wallstreetbets/comments/1bvx5c8/what_are_your_moves_tomorrow_april_5_2024/,6677,1712260818.0,2024-04-04 20:00:18,"What Are Your Moves Tomorrow, April 5, 2024
 
-[View Post](https://www.reddit.com/r/wallstreetbets/post-viewer/1bvx5c8)",10,0,0.42665482,Market Disruption,0.0,neutral,Neutral,"ARE, POST, WWW, POST"
-11,"Most Anticipated Earnings Releases for the week beginning April 8th, 2024",117,1bvwjb9,https://i.redd.it/gefizczdmisc1.png,98,1712259447.0,2024-04-04 19:37:27,"Most Anticipated Earnings Releases for the week beginning April 8th, 2024
+[View Post](https://www.reddit.com/r/wallstreetbets/post-viewer/1bvx5c8)",10,0,0.41615453,Market Disruption,0.0,neutral,Neutral,"ARE, POST, WWW, POST"
+11,"Most Anticipated Earnings Releases for the week beginning April 8th, 2024",124,1bvwjb9,https://i.redd.it/gefizczdmisc1.png,101,1712259447.0,2024-04-04 19:37:27,"Most Anticipated Earnings Releases for the week beginning April 8th, 2024
 
-",11,0,0.8927449,Market Disruption,0.0,neutral,Neutral,FOR
-12,2k to 112k in a day (sold right after and it dipped a bit. Thanks SPY.,6134,1bvw7ou,https://i.redd.it/15veoqf0kisc1.jpeg,813,1712258696.0,2024-04-04 19:24:56,"2k to 112k in a day (sold right after and it dipped a bit. Thanks SPY.
+",11,1,0.74414575,Corporate Earnings and Revenue,0.0,neutral,Neutral,FOR
+12,2k to 112k in a day (sold right after and it dipped a bit. Thanks SPY.,6278,1bvw7ou,https://i.redd.it/15veoqf0kisc1.jpeg,840,1712258696.0,2024-04-04 19:24:56,"2k to 112k in a day (sold right after and it dipped a bit. Thanks SPY.
 
-",12,2,0.9056001,Market Volatility,0.4404,positive,Neutral,"DAY, IT"
-13,I just took a 20k shit… RIP my calls,2242,1bvvo1f,https://i.redd.it/deuryunogisc1.jpeg,261,1712257511.0,2024-04-04 19:05:11,"I just took a 20k shit… RIP my calls
+",12,3,0.9057757,Market Liquidity and Volume,0.4404,positive,Neutral,"DAY, IT"
+13,I just took a 20k shit… RIP my calls,2268,1bvvo1f,https://i.redd.it/deuryunogisc1.jpeg,261,1712257511.0,2024-04-04 19:05:11,"I just took a 20k shit… RIP my calls
 
-",13,2,0.8117742,Market Volatility,-0.5574,negative,Neutral,
-14,Closed my 300 puts this morning  for 600$ - took a 5k loss- now worth 150k,1066,1bvxya3,https://i.redd.it/bvfcmwtwvisc1.jpeg,265,1712262633.0,2024-04-04 20:30:33,"Closed my 300 puts this morning  for 600$ - took a 5k loss- now worth 150k
+",13,0,0.55650485,Market Disruption,-0.5574,negative,Neutral,
+14,"The new FED'S ""Loose Cannon""",618,1bw4cq8,https://i.redd.it/wc0wcdg75ksc1.png,300,1712277866.0,2024-04-05 00:44:26,"The new FED'S ""Loose Cannon""
 
-",14,3,0.88411975,Market Volatility,0.2263,positive,Neutral,"FOR, NOW"
-15,"The new FED'S ""Loose Cannon""",477,1bw4cq8,https://i.redd.it/wc0wcdg75ksc1.png,243,1712277866.0,2024-04-05 00:44:26,"The new FED'S ""Loose Cannon""
+",14,1,0.8487817,Corporate Earnings and Revenue,-0.3182,negative,Neutral,
+15,Closed my 300 puts this morning  for 600$ - took a 5k loss- now worth 150k,1094,1bvxya3,https://i.redd.it/bvfcmwtwvisc1.jpeg,272,1712262633.0,2024-04-04 20:30:33,"Closed my 300 puts this morning  for 600$ - took a 5k loss- now worth 150k
 
-",15,1,0.6244146,Market Disruption,-0.3182,negative,Neutral,
-16,Today in a nutshell,1217,1bvwau8,https://i.redd.it/munc2cnqkisc1.jpeg,54,1712258899.0,2024-04-04 19:28:19,"Today in a nutshell
+",15,3,0.89250374,Market Liquidity and Volume,0.2263,positive,Neutral,"FOR, NOW"
+16,Today in a nutshell,1243,1bvwau8,https://i.redd.it/munc2cnqkisc1.jpeg,54,1712258899.0,2024-04-04 19:28:19,"Today in a nutshell
 
-",16,1,0.6244147,Market Disruption,0.0,neutral,Neutral,
-17,Weed Stocks Already Got Smoked Twice - Low Risk My Ass,1764,1bvs8sk,https://i.redd.it/tllg2ur7thsc1.jpeg,428,1712249619.0,2024-04-04 16:53:39,"Weed Stocks Already Got Smoked Twice - Low Risk My Ass
+",16,1,0.7456645,Corporate Earnings and Revenue,0.0,neutral,Neutral,
+17,Weed Stocks Already Got Smoked Twice - Low Risk My Ass,1773,1bvs8sk,https://i.redd.it/tllg2ur7thsc1.jpeg,430,1712249619.0,2024-04-04 16:53:39,"Weed Stocks Already Got Smoked Twice - Low Risk My Ass
 
-",17,3,0.62313676,Market Volatility,-0.7717,negative,Bullish,LOW
-18,FINAL UPDATE 800->40k spy puts,923,1bvwxa5,https://www.reddit.com/gallery/1bvwxa5,232,1712260306.0,2024-04-04 19:51:46,"FINAL UPDATE 800->40k spy puts
+",17,0,0.8926481,Market Disruption,-0.7717,negative,Bullish,LOW
+18,FINAL UPDATE 800->40k spy puts,933,1bvwxa5,https://www.reddit.com/gallery/1bvwxa5,232,1712260306.0,2024-04-04 19:51:46,"FINAL UPDATE 800->40k spy puts
 
-",18,2,0.8491104,Market Volatility,0.0,neutral,Neutral,
-19,Huge Sell off today on $SPY $SPX due to Fed Speaker,741,1bvv6y3,https://www.reddit.com/gallery/1bvv6y3,243,1712256449.0,2024-04-04 18:47:29,"Huge Sell off today on $SPY $SPX due to Fed Speaker
+",18,3,0.55980355,Market Liquidity and Volume,0.0,neutral,Neutral,
+19,Huge Sell off today on $SPY $SPX due to Fed Speaker,750,1bvv6y3,https://www.reddit.com/gallery/1bvv6y3,244,1712256449.0,2024-04-04 18:47:29,"Huge Sell off today on $SPY $SPX due to Fed Speaker
 
-",19,1,0.56100374,Market Disruption,0.3182,positive,Neutral,ON
-20,Bank Run Wednesday - watch out!,1,1bw6qze,https://www.reddit.com/r/wallstreetbets/comments/1bw6qze/bank_run_wednesday_watch_out/,1,1712284358.0,2024-04-05 02:32:38,"Bank Run Wednesday - watch out!
+",19,1,0.89123183,Corporate Earnings and Revenue,0.3182,positive,Neutral,ON
+20,Bank Run Wednesday - watch out!,6,1bw6qze,https://www.reddit.com/r/wallstreetbets/comments/1bw6qze/bank_run_wednesday_watch_out/,10,1712284358.0,2024-04-05 02:32:38,"Bank Run Wednesday - watch out!
 
-Next Wednesday, April 10, 2024, I'm withdrawing 400$ cash from my bank. Please join me. It's not much individually, but in aggregate? We'll find out!",20,0,0.62480086,Market Disruption,0.5423,positive,Neutral,"RUN, OUT, NEXT, CASH, ME, IT, OUT"
-21,"In one of the most chaotic market sessions of the year, the S&P500 went from a 52-week high to a 10-day low in a few hours. Here's why.",18,1bw69sq,https://i.redd.it/cx6fsc3kkksc1.png,7,1712283028.0,2024-04-05 02:10:28,"In one of the most chaotic market sessions of the year, the S&P500 went from a 52-week high to a 10-day low in a few hours. Here's why.
+Next Wednesday, April 10, 2024, I'm withdrawing 400$ cash from my bank. Please join me. It's not much individually, but in aggregate? We'll find out!",20,2,0.92484444,Market Liquidity and Volume,0.5423,positive,Neutral,"RUN, OUT, NEXT, CASH, ME, IT, OUT"
+21,"In one of the most chaotic market sessions of the year, the S&P500 went from a 52-week high to a 10-day low in a few hours. Here's why.",26,1bw69sq,https://i.redd.it/cx6fsc3kkksc1.png,12,1712283028.0,2024-04-05 02:10:28,"In one of the most chaotic market sessions of the year, the S&P500 went from a 52-week high to a 10-day low in a few hours. Here's why.
 
-",21,3,0.93041795,Market Volatility,-0.6486,negative,Neutral,"DAY, LOW"
-22,"Numb, very numb",10,1bw601t,https://i.redd.it/07vxcmnbiksc1.jpeg,9,1712282277.0,2024-04-05 01:57:57,"Numb, very numb
+",21,0,0.45045877,Market Disruption,-0.6486,negative,Neutral,"DAY, LOW"
+22,"Numb, very numb",16,1bw601t,https://i.redd.it/07vxcmnbiksc1.jpeg,12,1712282277.0,2024-04-05 01:57:57,"Numb, very numb
 
-",22,0,0.25,Market Disruption,-0.5859,negative,Neutral,
-23,DD: SGML seems a solid earner,1,1bw5ym0,https://www.reddit.com/r/wallstreetbets/comments/1bw5ym0/dd_sgml_seems_a_solid_earner/,3,1712282164.0,2024-04-05 01:56:04,"DD: SGML seems a solid earner
+",22,2,0.7499052,Market Liquidity and Volume,-0.5859,negative,Neutral,
+23,DD: SGML seems a solid earner,1,1bw5ym0,https://www.reddit.com/r/wallstreetbets/comments/1bw5ym0/dd_sgml_seems_a_solid_earner/,4,1712282164.0,2024-04-05 01:56:04,"DD: SGML seems a solid earner
 
 Right so here's the idea.
 
@@ -88,14 +88,14 @@ To recap:
 
 Position April 19th 13x15.00 Calls
 
-Some more info here if you want it https://www.investing.com/news/company-news/sigma-lithium-aims-to-double-production-with-plant-expansion-93CH-3359742",23,0,0.39240912,Market Disruption,0.3818,positive,Bearish,"DD, SO, ARE, IT, DO, IT, CARS, BY, CARS, IT, CARS, YOU, IT, WWW"
-24,"Yes, I recently bought calls. How did you know?",14,1bw5rrt,https://i.redd.it/pi3fxxhigksc1.jpeg,6,1712281669.0,2024-04-05 01:47:49,"Yes, I recently bought calls. How did you know?
+Some more info here if you want it https://www.investing.com/news/company-news/sigma-lithium-aims-to-double-production-with-plant-expansion-93CH-3359742",23,1,0.9839363,Corporate Earnings and Revenue,0.3818,positive,Bearish,"DD, SO, ARE, IT, DO, IT, CARS, BY, CARS, IT, CARS, YOU, IT, WWW"
+24,"Yes, I recently bought calls. How did you know?",18,1bw5rrt,https://i.redd.it/pi3fxxhigksc1.jpeg,6,1712281669.0,2024-04-05 01:47:49,"Yes, I recently bought calls. How did you know?
 
-",24,3,0.49716654,Market Volatility,0.4019,positive,Neutral,YOU
+",24,0,0.62481076,Market Disruption,0.4019,positive,Neutral,YOU
 25,Tesla scouts sites for $3bn India car plant in boost for Modi,0,1bw5n0t,https://www.ft.com/content/e9cbf92f-17f9-439a-ab7f-80fd8b589472,1,1712281315.0,2024-04-05 01:41:55,"Tesla scouts sites for $3bn India car plant in boost for Modi
 
-",25,0,0.25,Market Disruption,0.4019,positive,Neutral,"FOR, CAR, FOR, TSLA"
-26,Real talk. - what lessons can be learned from todays cliff?,7,1bw5i36,https://www.reddit.com/r/wallstreetbets/comments/1bw5i36/real_talk_what_lessons_can_be_learned_from_todays/,23,1712280930.0,2024-04-05 01:35:30,"Real talk. - what lessons can be learned from todays cliff?
+",25,3,0.91640776,Market Liquidity and Volume,0.4019,positive,Neutral,"FOR, CAR, FOR, TSLA"
+26,Real talk. - what lessons can be learned from todays cliff?,10,1bw5i36,https://www.reddit.com/r/wallstreetbets/comments/1bw5i36/real_talk_what_lessons_can_be_learned_from_todays/,31,1712280930.0,2024-04-05 01:35:30,"Real talk. - what lessons can be learned from todays cliff?
 
 seeing lots of gain porn and loss porn from those who sold calls/puts too soon/late....
 
@@ -103,10 +103,10 @@ Feels like with the economy running so hot- we should really pay attention to Fe
 
 &#x200B;
 
-Tomorrow we;ll get data before the market opens...so now what? ",26,1,0.9739651,Market Disruption,0.204,positive,Neutral,"BE, SO, SO, NOW, LEA"
-27,"NVDA puts. $2994 to $26,191",30,1bw3gps,https://www.reddit.com/gallery/1bw3gps,17,1712275608.0,2024-04-05 00:06:48,"NVDA puts. $2994 to $26,191
+Tomorrow we;ll get data before the market opens...so now what? ",26,0,0.97406554,Market Disruption,0.204,positive,Neutral,"BE, SO, SO, NOW, LEA"
+27,"NVDA puts. $2994 to $26,191",29,1bw3gps,https://www.reddit.com/gallery/1bw3gps,17,1712275608.0,2024-04-05 00:06:48,"NVDA puts. $2994 to $26,191
 
-",27,3,0.6230865,Market Volatility,0.0,neutral,Neutral,NVDA
-28,RDDT $10.3m block trade after hours,21,1bw31xg,https://i.redd.it/0nyjyu7bvjsc1.jpeg,19,1712274537.0,2024-04-04 23:48:57,"RDDT $10.3m block trade after hours
+",27,0,0.25,Market Disruption,0.0,neutral,Neutral,NVDA
+28,RDDT $10.3m block trade after hours,24,1bw31xg,https://i.redd.it/0nyjyu7bvjsc1.jpeg,19,1712274537.0,2024-04-04 23:48:57,"RDDT $10.3m block trade after hours
 
-",28,3,0.74929076,Market Volatility,-0.4404,negative,Neutral,MMM
+",28,1,0.8499048,Corporate Earnings and Revenue,-0.4404,negative,Neutral,MMM

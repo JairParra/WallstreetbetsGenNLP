@@ -131,7 +131,7 @@ if __name__ == '__main__':
         
     ### Option 2: Fetch data for run using the API 
     else: 
-        print("*"*100 + "\n1. Fetching Reddit data...\n" + "*"*100)
+        print("#"*100 + "\n1. Fetching Reddit data...\n" + "#"*100)
         
         # Create file temppath 
         datapath = os.path.join("data_temp", "reddit.csv")
@@ -152,6 +152,8 @@ if __name__ == '__main__':
     ##########################
     ### 2. Topic Modelling ###
     ##########################
+    
+    print("#"*100 + "\n2. Performing Topic Modelling...\n" + "#"*100)
     
     # Extract all the titles from the dataframe
     if LOAD_SAMPLE_DATA: 
@@ -230,6 +232,8 @@ if __name__ == '__main__':
     ### 3. Sentiment Analysis ###
     #############################
     
+    print("#"*100 + "\n3. Performing Sentiment Analysis...\n" + "#"*100)
+    
     # create a temporary column for sentiment analysis 
     df_join["processed_text"] = clean_sentiment(df_join['text'], clean_emojis=True)
     
@@ -243,12 +247,16 @@ if __name__ == '__main__':
     ### 4. Trend Analysis ###
     #########################
     
+    print("#"*100 + "\n4. Estimating Reddits trend sentiment...\n" + "#"*100)
+    
     # assign trend sentiment via lexiconds 
     df_join['trend_sentiment'] = df_join['text'].apply(analyze_emotion) # analyzing the trending emotion
 
     #########################
     ### 5. Stock Analysis ###
     #########################
+    
+    print("#"*100 + "\n5. Identiying stocks in reddits...\n" + "#"*100)
     
     # extract the tickers from all the texts in the df_join and store them in a new column
     df_join['tickers'] = df_join['text'].apply(extract_tickers, str_format=True)
@@ -257,6 +265,9 @@ if __name__ == '__main__':
     ######################
     ### 6. Save Result ###
     ######################
+    
+    
+    print("#"*100 + "\n6. Saving data to wsb_clean.csv...\n" + "#"*100)
 
     df_join.to_csv("data_clean/wsb_clean.csv")    
     
