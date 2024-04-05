@@ -18,6 +18,7 @@ from tqdm import tqdm
 
 # data science 
 import os 
+import nltk
 import numpy as np 
 import pandas as pd
 from scipy.special import expit
@@ -56,6 +57,13 @@ from src.stock_processor import extract_tickers
 from transformers import AutoTokenizer
 from transformers import AutoModelForSequenceClassification
 
+# Download necessary NLTK data
+nltk.download('corpus', quiet=True)
+nltk.download('stopwords', quiet=True)
+nltk.download('punkt')
+nltk.download('sentiwordnet', quiet=True)
+nltk.download('wordnet', quiet=True)
+
 #########################
 ### 2. Configurations ###
 #########################
@@ -74,7 +82,7 @@ pd.options.display.max_columns = None
 # default configurations 
 LOAD_SAMPLE_DATA = False
 RETRAIN = True
-LIMIT_FETCH = 100
+LIMIT_FETCH = 10
 verbose = 1
 
 
@@ -160,14 +168,6 @@ if __name__ == '__main__':
         # Create file temppath 
         datapath = os.path.join("data_temp", "reddit.csv")
         
-        # # Fetch data from the reddit API 
-        # _ = measure_time(
-        #     hide_output(
-        #          create_reddit_csv(subreddit_name="wallstreetbets", 
-        #                            csv_name=datapath, limit=LIMIT_FETCH)                   
-        #     )
-        # )
-        
         # Fetch data from the reddit API 
         _ = measure_time(
             create_reddit_csv(subreddit_name="wallstreetbets", 
@@ -251,7 +251,7 @@ if __name__ == '__main__':
             print(f"First 5 words: {', '.join(top_words_dict[topic_id][:5])}")
             print()
     
-    # Assign topics to the texts
+    # Assign topics to the textsx
     df_assigned_topics = create_topics_df(df['text'], lda_model, 
                                           topic_names).drop(columns=["doc_text"])
     

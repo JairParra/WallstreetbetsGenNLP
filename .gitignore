@@ -168,4 +168,6 @@ cython_debug/
 *.DS_Store*
 *JENVY*
 *lda_models/*
-data/temp/*
+data_temp/*
+data_clean/wsb_clean.csv
+data_raw/reddit_wsb.csv
