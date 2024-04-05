@@ -12,6 +12,7 @@ main.py
 # general 
 import time
 import pprint 
+import argparse
 import warnings 
 from tqdm import tqdm
 
@@ -73,6 +74,7 @@ pd.options.display.max_columns = None
 # default configurations 
 LOAD_SAMPLE_DATA = False
 RETRAIN = True
+LIMIT_FETCH = 100
 verbose = 1
 
 
@@ -101,6 +103,25 @@ candidate_topic_names = [
     "Market Liquidity and Volume"
 ]
 
+
+# Create an ArgumentParser object
+parser = argparse.ArgumentParser(description='Modify default configurations')
+
+# Add arguments for each configuration option
+parser.add_argument('--load_sample_data', action='store_true', default=False, help='Load sample data')
+parser.add_argument('--retrain', action='store_true', default=True, help='Retrain the model')
+parser.add_argument('--limit_fetch', type=int, default=100, help='Limit for fetching data')
+parser.add_argument('--verbose', type=int, default=1, help='Verbosity level')
+
+# Parse the command line arguments
+args = parser.parse_args()
+
+# Update the default configurations with the command line arguments
+LOAD_SAMPLE_DATA = args.load_sample_data
+RETRAIN = args.retrain
+LIMIT_FETCH = args.limit_fetch
+verbose = args.verbose
+
 ############### 
 ### 3. Main ###
 ###############
@@ -110,6 +131,9 @@ if __name__ == '__main__':
     #####################
     ### 0. Preloaders ###
     #####################
+    
+    # start timing 
+    t0 = time.time()
     
     # load pretrained zero-shot classification model
     classifier = pipeline("zero-shot-classification", model="MoritzLaurer/DeBERTa-v3-base-mnli-fever-anli")
@@ -136,12 +160,18 @@ if __name__ == '__main__':
         # Create file temppath 
         datapath = os.path.join("data_temp", "reddit.csv")
         
+        # # Fetch data from the reddit API 
+        # _ = measure_time(
+        #     hide_output(
+        #          create_reddit_csv(subreddit_name="wallstreetbets", 
+        #                            csv_name=datapath, limit=LIMIT_FETCH)                   
+        #     )
+        # )
+        
         # Fetch data from the reddit API 
         _ = measure_time(
-            hide_output(
-                 create_reddit_csv(subreddit_name="wallstreetbets", 
-                                   csv_name=datapath, limit=10)                   
-            )
+            create_reddit_csv(subreddit_name="wallstreetbets", 
+                              csv_name=datapath, limit=LIMIT_FETCH)                   
         )
     
         # Load the data from the data path
@@ -271,6 +301,9 @@ if __name__ == '__main__':
 
     df_join.to_csv("data_clean/wsb_clean.csv")    
     
+    
+    t1 = time.time() 
+    print(f"Took a total of {round(t1-t0, 3)} seconds")
 
 
 
