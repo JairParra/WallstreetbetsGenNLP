@@ -147,8 +147,8 @@ if __name__ == '__main__':
     classifier = pipeline("zero-shot-classification", model="MoritzLaurer/DeBERTa-v3-base-mnli-fever-anli")
     
     # Preload trend word lists
-    bullish_words = load_words_from_csv('data_raw/bearish.csv') # Bullish word list
-    bearish_words = load_words_from_csv('data_raw/bullish.csv') # Bearish word list
+    bullish_words = load_words_from_csv("bullshit.csv") # Bullish word list
+    bearish_words = load_words_from_csv("bearish.csv") # Bearish word list
         
     #######################
     ### 1. Data Loading ###
@@ -171,7 +171,8 @@ if __name__ == '__main__':
         # Fetch data from the reddit API 
         _ = measure_time(
             create_reddit_csv(subreddit_name="wallstreetbets", 
-                              csv_name=datapath, limit=LIMIT_FETCH)                   
+                              csv_name=datapath, 
+                              limit=LIMIT_FETCH)                   
         )
     
         # Load the data from the data path
@@ -300,7 +301,6 @@ if __name__ == '__main__':
     print("#"*100 + "\n6. Saving data to wsb_clean.csv...\n" + "#"*100)
 
     df_join.to_csv("data_clean/wsb_clean.csv")    
-    
     
     t1 = time.time() 
     print(f"Took a total of {round(t1-t0, 3)} seconds")
