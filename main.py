@@ -147,8 +147,8 @@ if __name__ == '__main__':
     classifier = pipeline("zero-shot-classification", model="MoritzLaurer/DeBERTa-v3-base-mnli-fever-anli")
     
     # Preload trend word lists
-    bullish_words = load_words_from_csv("bullshit.csv") # Bullish word list
-    bearish_words = load_words_from_csv("bearish.csv") # Bearish word list
+    bullish_words = load_words_from_csv("data_raw/bullish.csv") # Bullish word list
+    bearish_words = load_words_from_csv("data_raw/bearish.csv") # Bearish word list
         
     #######################
     ### 1. Data Loading ###
@@ -188,7 +188,7 @@ if __name__ == '__main__':
     
     # Extract all the titles from the dataframe
     if LOAD_SAMPLE_DATA: 
-        texts = df['text'].tolist().iloc[0:30]
+        texts = df['text'].iloc[0:30].tolist()
     else: 
         texts = df['text'].tolist()  
     

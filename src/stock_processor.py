@@ -166,7 +166,9 @@ import re
 from typing import List
 from fuzzywuzzy import fuzz
 
-def extract_tickers(text: str, ticker_csv="data_raw/russell3000.csv", str_format:bool=False) -> Union[str, List[str]]:
+tickers_df = pd.read_csv("data_raw/russell3000.csv")
+
+def extract_tickers(text: str, ticker_df=tickers_df, str_format:bool=False) -> Union[str, List[str]]:
     """
     Extracts and returns valid ticker symbols from a given text. 
     Now includes a check to add a ticker if a company name is present in the text with at least 90% similarity.
@@ -177,9 +179,11 @@ def extract_tickers(text: str, ticker_csv="data_raw/russell3000.csv", str_format
     Returns:
     - List[str]: A list of valid ticker symbols.
     """
-    ticker_df = pd.read_csv(ticker_csv)
+    ticker_df = ticker_df
     tickers = list(ticker_df['Ticker'].str.upper())
-
+    ignored_tickers = ['A', 'ARE', 'FOR', 'ON', 'OUT', 'SEE', 'IT', 'ALL', 'GO', 'BIG', 'BY', 'CAN', 'DAY', 'DO', 'GET', 'HE', 'HIM', 'HIS' ,'NOW', 'FOR', 'HAS', 'ALL', 'BE', 'DO']
+    tickers = [ticker for ticker in tickers if ticker not in ignored_tickers] 
+    
     # Removing common corporate suffixes to improve matching accuracy
     names = [re.sub(r'\b(ltd\.|inc\.|corp\.|co\.|llc\.|plc\.|ltd|inc|corp|co|llc|plc)\b', '', name, flags=re.IGNORECASE).strip() for name in ticker_df['Name']]
     name_to_ticker = {name.upper(): ticker for name, ticker in zip(names, tickers)}  # Creating a mapping from names to tickers
