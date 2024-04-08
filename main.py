@@ -290,13 +290,14 @@ if __name__ == '__main__':
     print("#"*100 + "\n5. Identiying stocks in reddits...\n" + "#"*100)
     
     # extract the tickers from all the texts in the df_join and store them in a new column
-    df_join['tickers'] = df_join['text'].apply(extract_tickers, str_format=True)
+    df_join['tickers'] = df_join['text'].apply(extract_tickers, 
+                                               ticker_df_path="data_raw/russell3000.csv", 
+                                               str_format=True)
     
     
     ######################
     ### 6. Save Result ###
     ######################
-    
     
     print("#"*100 + "\n6. Saving data to wsb_clean.csv...\n" + "#"*100)
 

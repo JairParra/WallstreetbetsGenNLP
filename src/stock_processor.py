@@ -22,6 +22,7 @@ from yahoo_fin import stock_info as si
 
 # data science 
 import pandas as pd
+import pandas as pdA
 from pandas import DataFrame
 
 # Filter out FutureWarnings
@@ -161,14 +162,7 @@ def get_technical_indicators(ticker: str, date_timestamp: int,  short_ma_days = 
 ### 3. Core Functions ###
 #########################
 
-import pandas as pdA
-import re
-from typing import List
-from fuzzywuzzy import fuzz
-
-tickers_df = pd.read_csv("data_raw/russell3000.csv")
-
-def extract_tickers(text: str, ticker_df=tickers_df, str_format:bool=False) -> Union[str, List[str]]:
+def extract_tickers(text: str, ticker_df_path:str="data_raw/russell3000.csv", str_format:bool=False) -> Union[str, List[str]]:
     """
     Extracts and returns valid ticker symbols from a given text. 
     Now includes a check to add a ticker if a company name is present in the text with at least 90% similarity.
@@ -179,7 +173,10 @@ def extract_tickers(text: str, ticker_df=tickers_df, str_format:bool=False) -> U
     Returns:
     - List[str]: A list of valid ticker symbols.
     """
-    ticker_df = ticker_df
+    # load dataframe from location 
+    ticker_df = pd.read_csv(ticker_df_path)
+    
+    # prepare valid tickers list
     tickers = list(ticker_df['Ticker'].str.upper())
     ignored_tickers = ['A', 'ARE', 'FOR', 'ON', 'OUT', 'SEE', 'IT', 'ALL', 'GO', 'BIG', 'BY', 'CAN', 'DAY', 'DO', 'GET', 'HE', 'HIM', 'HIS' ,'NOW', 'FOR', 'HAS', 'ALL', 'BE', 'DO']
     tickers = [ticker for ticker in tickers if ticker not in ignored_tickers] 
