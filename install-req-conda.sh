@@ -20,6 +20,12 @@ PACKAGES=(
   wordcloud
   yahoo_fin
   yfinance
+  fuzzywuzzy
+  python-Levenshtein
+  transformers
+  datasets
+  tensorflow
+  tf-keras
 )
 
 echo "Starting installation of Python packages using conda..."

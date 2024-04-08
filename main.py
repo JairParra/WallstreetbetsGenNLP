@@ -12,8 +12,10 @@ main.py
 # general 
 import time
 import pprint 
+import logging 
 import argparse
 import warnings 
+import datetime
 from tqdm import tqdm
 
 # data science 
@@ -79,12 +81,17 @@ pprint = pprint.PrettyPrinter(indent=4).pprint
 # Change number of display columns
 pd.options.display.max_columns = None
 
+# Configure logging
+current_datetime = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+filename = f"logs/example_{current_datetime}.log"
+logging.basicConfig(filename=filename, level=logging.INFO)
+
 # default configurations 
 LOAD_SAMPLE_DATA = False
 RETRAIN = True
 LIMIT_FETCH = 10
 verbose = 1
-
+OUTPUT_PATH = "data_clean/wsb_clean.csv"
 
 # declare base possible topic names 
 # later to be loaded from a local file
@@ -142,6 +149,9 @@ if __name__ == '__main__':
     
     # start timing 
     t0 = time.time()
+
+    # add start message to logging with specific time 
+    logging.info(f"Starting the process at {datetime.datetime.now()}")
     
     # load pretrained zero-shot classification model
     classifier = pipeline("zero-shot-classification", model="MoritzLaurer/DeBERTa-v3-base-mnli-fever-anli")
@@ -155,6 +165,9 @@ if __name__ == '__main__':
     #######################
 
     ### Option 1: Load Sample Datas
+
+    # Log start of data loading 
+    logging.info("Starting data loading...")
 
     if LOAD_SAMPLE_DATA:
         print("1. Loading sample data...")
@@ -178,14 +191,19 @@ if __name__ == '__main__':
         # Load the data from the data path
         df = pd.read_csv(datapath)
         print(df)
+
+        # Log the number of rows fetched
+        logging.info(f"Fetched {len(df)} rows of data.")
         
+    logging.info("Data loaded successfully.")
 
     ##########################
     ### 2. Topic Modelling ###
     ##########################
     
     print("#"*100 + "\n2. Performing Topic Modelling...\n" + "#"*100)
-    
+    logging.info("Starting topic modelling...")
+
     # Extract all the titles from the dataframe
     if LOAD_SAMPLE_DATA: 
         texts = df['text'].iloc[0:30].tolist()
@@ -199,6 +217,9 @@ if __name__ == '__main__':
     del(texts)
     
     if RETRAIN: 
+        print("Retraining the model...")
+        logging.info("Retraining the LDA model...")
+
         # Create a dictionary with the parameters used in the LDA model 
         lda_params = {
             'num_topics': 4,                 # The number of requested latent topics to be extracted from the training corpus
@@ -219,6 +240,9 @@ if __name__ == '__main__':
         df['index'] = range(len(df))
         
     else: 
+        # Load the LDA model and the id2word dictionary
+        print("Loading the model...")
+        logging.info("Loading the LDA model...")
         
         # Example usage
         model_dir = "models/lda_model"
@@ -227,7 +251,13 @@ if __name__ == '__main__':
         # Reconstruct corpus from clean_texts
         corpus = [id2word.doc2bow(text) for text in clean_texts]
         
-        
+    # log the completion of the topic modelling
+    logging.info("Topic modelling completed.")
+
+    # Start topic assignment section 
+    print("#"*100 + "\nAssigning topics to the texts...\n" + "#"*100)
+    logging.info("Assigning topics to the texts...")
+
     # Extract top n words per topic
     top_words_dict = extract_top_words(lda_model, top_n=40)
     
@@ -258,13 +288,17 @@ if __name__ == '__main__':
     
     # Left join the assigned topics to the original dataframe
     df_join = df.merge(df_assigned_topics, on='index')
+
+    # log the completion of the topic assignment
+    logging.info("Topics assigned to the texts.")
     
     #############################
     ### 3. Sentiment Analysis ###
     #############################
     
     print("#"*100 + "\n3. Performing Sentiment Analysis...\n" + "#"*100)
-    
+    logging.info("Starting sentiment analysis...")
+
     # create a temporary column for sentiment analysis 
     df_join["processed_text"] = clean_sentiment(df_join['text'], clean_emojis=True)
     
@@ -274,39 +308,49 @@ if __name__ == '__main__':
     # drop the temp column 
     df_join.drop(columns=["processed_text"], inplace=True)
     
+    # log the completion of the sentiment analysis
+    logging.info("Sentiment analysis completed.")
+
     #########################
     ### 4. Trend Analysis ###
     #########################
     
     print("#"*100 + "\n4. Estimating Reddits trend sentiment...\n" + "#"*100)
+    logging.info("Starting trend analysis...")
     
     # assign trend sentiment via lexiconds 
     df_join['trend_sentiment'] = df_join['text'].apply(analyze_emotion) # analyzing the trending emotion
+
+    # log the completion of the trend sentiment assignment
+    logging.info("Trend sentiment assigned.")
 
     #########################
     ### 5. Stock Analysis ###
     #########################
     
     print("#"*100 + "\n5. Identiying stocks in reddits...\n" + "#"*100)
+    logging.info("Starting stock analysis...")
     
     # extract the tickers from all the texts in the df_join and store them in a new column
     df_join['tickers'] = df_join['text'].apply(extract_tickers, 
                                                ticker_df_path="data_raw/russell3000.csv", 
                                                str_format=True)
     
+    # log the completion of the stock identification
+    logging.info("Stock identification completed.")
     
     ######################
     ### 6. Save Result ###
     ######################
-    
-    print("#"*100 + "\n6. Saving data to wsb_clean.csv...\n" + "#"*100)
 
-    df_join.to_csv("data_clean/wsb_clean.csv")    
+    print("#"*100 + f"\n6. Saving data to {OUTPUT_PATH}...\n" + "#"*100)
+    logging.info(f"Saving the cleaned data to {OUTPUT_PATH}...")
+
+    # Save the cleaned data to a csv file
+    df_join.to_csv({OUTPUT_PATH})    
     
     t1 = time.time() 
     print(f"Took a total of {round(t1-t0, 3)} seconds")
-
-
 
 
 
