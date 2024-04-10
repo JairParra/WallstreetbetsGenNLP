@@ -60,8 +60,8 @@ def load_words_from_csv(file_path):
     df = pd.read_csv(file_path)
     return df['word'].tolist()
 # Usage
-bullish_words = load_words_from_csv('data_raw/bearish.csv') #are redifining 
-bearish_words = load_words_from_csv('data_raw/bullish.csv')
+bullish_words = load_words_from_csv('data_raw/bullish.csv') #are redifining 
+bearish_words = load_words_from_csv('data_raw/bearish.csv')
 
 #########################
 ### 3. Core Functions ###
