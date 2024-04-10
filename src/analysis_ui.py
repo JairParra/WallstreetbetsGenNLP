@@ -12,6 +12,9 @@ def load_data():
 
 df = load_data()
 
+# Streamlit app
+
+
 def parse_tickers(ticker_str):
     if pd.isnull(ticker_str) or not ticker_str:
         return []
@@ -30,7 +33,8 @@ def get_top_tickers(df, n=10):
 
 # Creating the visualizations
 st.title("WSB Data Analysis")
-
+st.header("Data Overview")
+st.write(df.head())
 
 st.header("Sentiment Score Distribution")
 fig, ax = plt.subplots()
