@@ -30,6 +30,7 @@ reddit = praw.Reddit(
         client_id="YnmRgUfHOn5foh17UNLsrA",
         client_secret="EcvOf0J1NWVyuF3PTmxGkAAiuqQLkw",
         user_agent="testscript by /u/tailinks",
+        check_for_async=False,
     )
 
     
@@ -92,6 +93,7 @@ def create_reddit_csv(subreddit_name= "wallstreetbets", csv_name="reddit.csv", l
     data = []
 
     # Fetch the top submissions from the "wallstreetbets" subreddit
+    print(f"Fetching top {limit} reddits...")
     for submission in reddit.subreddit(subreddit_name).top(limit=limit):
         # Create a dictionary to store the submission data
         submission_data = {
@@ -104,6 +106,8 @@ def create_reddit_csv(subreddit_name= "wallstreetbets", csv_name="reddit.csv", l
         }
         # Append the submission data to the list
         data.append(submission_data)
+        
+    print(f"Fetching hot {limit} reddits...")
     for submission in reddit.subreddit(subreddit_name).hot(limit=limit):
         # Create a dictionary to store the submission data
         submission_data = {
@@ -116,6 +120,8 @@ def create_reddit_csv(subreddit_name= "wallstreetbets", csv_name="reddit.csv", l
         }
         # Append the submission data to the list
         data.append(submission_data)
+        
+    print(f"Fetching new {limit} reddits...")
     for submission in reddit.subreddit(subreddit_name).new(limit=limit):
         # Create a dictionary to store the submission data
         submission_data = {
