@@ -1,0 +1,27 @@
+name: wsb_env
+channels:
+  - defaults
+  - conda-forge
+  - anaconda
+dependencies:
+  - python=3.9
+  - numpy
+  - pandas
+  - matplotlib
+  - seaborn
+  - ipykernel
+  - tqdm
+  - nltk
+  - spacy
+  - gensim
+  - pyldavis
+  - pip:
+    - requests
+    - emoji
+    - pyLDAvis
+    - wordcloud
+    - tensorflow
+    - transformers
+    - tf-keras
+    - praw
+    - streamlit
