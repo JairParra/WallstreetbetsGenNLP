@@ -321,6 +321,9 @@ if __name__ == '__main__':
     # assign trend sentiment via lexiconds 
     df_join['trend_sentiment'] = df_join['text'].apply(analyze_emotion) # analyzing the trending emotion
 
+    # preview the data 
+    print(df_join.head(10))
+
     # log the completion of the trend sentiment assignment
     logging.info("Trend sentiment assigned.")
 
@@ -336,6 +339,9 @@ if __name__ == '__main__':
                                                ticker_df_path="data_raw/russell3000.csv", 
                                                str_format=True)
     
+    # preview the data 
+    print(df_join.head(10))
+    
     # log the completion of the stock identification
     logging.info("Stock identification completed.")
     
@@ -347,7 +353,7 @@ if __name__ == '__main__':
     logging.info(f"Saving the cleaned data to {OUTPUT_PATH}...")
 
     # Save the cleaned data to a csv file
-    df_join.to_csv({OUTPUT_PATH})    
+    df_join.to_csv(f"{OUTPUT_PATH}")    
     
     t1 = time.time() 
     print(f"Took a total of {round(t1-t0, 3)} seconds")
