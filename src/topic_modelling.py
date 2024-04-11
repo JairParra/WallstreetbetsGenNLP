@@ -48,7 +48,7 @@ from src.text_preprocessor import clean_lda_text
 
 # Dedicated NLP Visualizations 
 import pyLDAvis
-import pyLDAvis.gensim
+import pyLDAvis.gensim_models
 from wordcloud import WordCloud
 
 # Configurations 
