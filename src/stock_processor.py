@@ -199,7 +199,11 @@ def extract_tickers(text: str, ticker_df_path:str="data_raw/russell3000.csv", st
         # Using partial_ratio to allow for partial matches within the text
         if fuzz.partial_ratio(name.upper(), text.upper()) >= 90:
             # Appending the ticker corresponding to the matched name
-            valid_tickers.append(name_to_ticker[name.upper()])
+            try: 
+                valid_tickers.append(name_to_ticker[name.upper()])
+            except Exception as e: 
+                print(f"Invalid ticker found: {name.upper}, skipping...")
+                continue
             
     # convert to string format if prompted 
     if str_format:
