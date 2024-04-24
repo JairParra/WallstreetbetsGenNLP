@@ -59,18 +59,60 @@ from src.stock_processor import extract_tickers
 from transformers import AutoTokenizer
 from transformers import AutoModelForSequenceClassification
 
+
+###################
+### 2. Argument ###
+###################
+
+# default configurations 
+LOAD_SAMPLE_DATA = False
+RETRAIN = True
+LIMIT_FETCH = 10
+verbose = 1
+OUTPUT_PATH = "data_clean/wsb_clean.csv"
+
+# Create an ArgumentParser object
+parser = argparse.ArgumentParser(description='Modify default configurations')
+
+# Add arguments for each configuration option
+parser.add_argument('--load_sample_data', action='store_true', default=False, help='Load sample data')
+parser.add_argument('--retrain', action='store_true', default=True, help='Retrain the model')
+parser.add_argument('--limit_fetch', type=int, default=100, help='Limit for fetching data')
+parser.add_argument('--verbose', type=int, default=1, help='Verbosity level')
+parser.add_argument('--custom_output_name', type=str, default=None, help='Custom name for the output file')
+parser.add_argument('--start', type=int, default=0, help='Start index for sample data. Default=3000')
+parser.add_argument('--end', type=int, default=3000, help='End index for end data. Default=3000')
+
+# Parse the command line arguments
+args = parser.parse_args()
+
+# Update the default configurations with the command line arguments
+LOAD_SAMPLE_DATA = args.load_sample_data
+RETRAIN = args.retrain
+LIMIT_FETCH = args.limit_fetch
+verbose = args.verbose
+OUTPUT_PATH = f"data_clean/{args.custom_output_name}.csv" if args.custom_output_name is not None else OUTPUT_PATH
+
+# Verify that the inputs are valid
+if args.start < 0 or args.end < 0 or args.start > args.end:
+    raise ValueError("Invalid start and end values. Start must be less than or equal to end.")
+
+# Assign the input values to the variables START and END
+START = args.start
+END = args.end
+
+#########################
+### 3. Configurations ###
+#########################
+
+### Configurations
+
 # Download necessary NLTK data
 nltk.download('corpus', quiet=True)
 nltk.download('stopwords', quiet=True)
 nltk.download('punkt')
 nltk.download('sentiwordnet', quiet=True)
 nltk.download('wordnet', quiet=True)
-
-#########################
-### 2. Configurations ###
-#########################
-
-### Configurations
 
 # supress all warnings from praw 
 warnings.filterwarnings('ignore', module='praw')
@@ -85,13 +127,6 @@ pd.options.display.max_columns = None
 current_datetime = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 filename = f"logs/example_{current_datetime}.log"
 logging.basicConfig(filename=filename, level=logging.INFO)
-
-# default configurations 
-LOAD_SAMPLE_DATA = False
-RETRAIN = True
-LIMIT_FETCH = 10
-verbose = 1
-OUTPUT_PATH = "data_clean/wsb_clean.csv"
 
 # declare base possible topic names 
 # later to be loaded from a local file
@@ -119,28 +154,8 @@ candidate_topic_names = [
 ]
 
 
-# Create an ArgumentParser object
-parser = argparse.ArgumentParser(description='Modify default configurations')
-
-# Add arguments for each configuration option
-parser.add_argument('--load_sample_data', action='store_true', default=False, help='Load sample data')
-parser.add_argument('--retrain', action='store_true', default=True, help='Retrain the model')
-parser.add_argument('--limit_fetch', type=int, default=100, help='Limit for fetching data')
-parser.add_argument('--verbose', type=int, default=1, help='Verbosity level')
-parser.add_argument('--custom_output_name', type=str, default=None, help='Custom name for the output file')
-
-# Parse the command line arguments
-args = parser.parse_args()
-
-# Update the default configurations with the command line arguments
-LOAD_SAMPLE_DATA = args.load_sample_data
-RETRAIN = args.retrain
-LIMIT_FETCH = args.limit_fetch
-verbose = args.verbose
-OUTPUT_PATH = f"data_clean/{args.custom_output_name}.csv" if args.custom_output_name is not None else OUTPUT_PATH
-
 ############### 
-### 3. Main ###
+### 4. Main ###
 ###############
 
 if __name__ == '__main__':
@@ -173,7 +188,7 @@ if __name__ == '__main__':
 
     if LOAD_SAMPLE_DATA:
         print("1. Loading sample data...")
-        df = load_data_from_zip('data_raw/reddit_wsb.csv.zip')
+        df = load_data_from_zip('data_raw/reddit_wsb.csv.zip').iloc[START:END]
         print(df) 
         
     ### Option 2: Fetch data for run using the API 
@@ -208,7 +223,7 @@ if __name__ == '__main__':
 
     # Extract all the titles from the dataframe
     if LOAD_SAMPLE_DATA: 
-        texts = df['text'].iloc[0:3000].tolist()
+        texts = df['text'].tolist()
     else: 
         texts = df['text'].tolist()  
     
