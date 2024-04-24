@@ -127,6 +127,7 @@ parser.add_argument('--load_sample_data', action='store_true', default=False, he
 parser.add_argument('--retrain', action='store_true', default=True, help='Retrain the model')
 parser.add_argument('--limit_fetch', type=int, default=100, help='Limit for fetching data')
 parser.add_argument('--verbose', type=int, default=1, help='Verbosity level')
+parser.add_argument('--custom_output_name', type=str, default=None, help='Custom name for the output file')
 
 # Parse the command line arguments
 args = parser.parse_args()
@@ -136,6 +137,7 @@ LOAD_SAMPLE_DATA = args.load_sample_data
 RETRAIN = args.retrain
 LIMIT_FETCH = args.limit_fetch
 verbose = args.verbose
+OUTPUT_PATH = f"data_clean/{args.custom_output_name}.csv" if args.custom_output_name is not None else OUTPUT_PATH
 
 ############### 
 ### 3. Main ###
@@ -206,7 +208,7 @@ if __name__ == '__main__':
 
     # Extract all the titles from the dataframe
     if LOAD_SAMPLE_DATA: 
-        texts = df['text'].iloc[0:30].tolist()
+        texts = df['text'].iloc[0:3000].tolist()
     else: 
         texts = df['text'].tolist()  
     
