@@ -192,16 +192,13 @@ def extract_tickers(text: str, ticker_df_path:str="data_raw/russell3000.csv", st
     valid_tickers = [ticker for ticker in potential_tickers if ticker in tickers]
             
     # Additional step to check for company names in the text and add corresponding ticker if similarity >= 90%
-    for name in names:
-        # Using partial_ratio to allow for partial matches within the text
-        if fuzz.partial_ratio(name.upper(), text.upper()) >= 90:
-            # Appending the ticker corresponding to the matched name
-            try: 
-                valid_tickers.append(name_to_ticker[name.upper()])
-            except Exception as e: 
-                print(f"Invalid ticker found: {name.upper()}, skipping...")
-                continue
+    valid_tickers += [name_to_ticker.get(name.upper(), "") for name in names 
+                      if fuzz.partial_ratio(name.upper(), text.upper()) >= 90 
+                      and name.upper() not in valid_tickers]
             
+    # clean all empty strings 
+    valid_tickers = list(filter(None, valid_tickers))
+
     # convert to string format if prompted 
     if str_format:
         return ", ".join(valid_tickers)
