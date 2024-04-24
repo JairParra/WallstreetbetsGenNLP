@@ -188,11 +188,8 @@ def extract_tickers(text: str, ticker_df_path:str="data_raw/russell3000.csv", st
     ticker_pattern: str = r'\b[A-Za-z]{2,6}\b'
     potential_tickers: List[str] = re.findall(ticker_pattern, text.upper())  # Converting text to uppercase to match tickers format
     
-    valid_tickers: List[str] = []
-    
-    for ticker in potential_tickers:
-        if ticker in tickers:
-            valid_tickers.append(ticker)
+    # Filtering out invalid tickers
+    valid_tickers = [ticker for ticker in potential_tickers if ticker in tickers]
             
     # Additional step to check for company names in the text and add corresponding ticker if similarity >= 90%
     for name in names:
@@ -202,7 +199,7 @@ def extract_tickers(text: str, ticker_df_path:str="data_raw/russell3000.csv", st
             try: 
                 valid_tickers.append(name_to_ticker[name.upper()])
             except Exception as e: 
-                print(f"Invalid ticker found: {name.upper}, skipping...")
+                print(f"Invalid ticker found: {name.upper()}, skipping...")
                 continue
             
     # convert to string format if prompted 
