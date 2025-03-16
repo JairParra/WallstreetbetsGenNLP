@@ -9,9 +9,9 @@ and data analytics with Python, HuggingFace, Streamlit, and Google Cloud.
 
 ## Dashboard 
 
-This guide provides instructions to ensure Streamlit is installed and to run the `analysis_ui.py` dashboard.
+To run the `analysis_ui.py` dashboard, you can follow the steps below.
 
-### 1. Install Streamlit
+#### 1. Install Streamlit
 
 If Streamlit is not already installed, you can install it using pip:
 
@@ -19,7 +19,7 @@ If Streamlit is not already installed, you can install it using pip:
 pip install streamlit
 ```
 
-### 2.  Run the Dashboard
+#### 2.  Run the Dashboard
 
 At root level, execute the command 
 
@@ -27,7 +27,7 @@ At root level, execute the command
 streamlit run analysis_ui.py
 ```
 
-### 3. Access the dashboard 
+#### 3. Access the dashboard 
 
 Once the script is running, Streamlit will provide a local URL in the terminal, such as:
 
