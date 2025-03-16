@@ -1,6 +1,7 @@
 # WallstreetbetsGenNLP
 
-An AI-powered behavioral analysis of Wallstreetbets investor discussions.
+AI-powered behavioral analysis framework of Wallstreetbets investor discussions using topic clustering, sentiment analysis, text mining, 
+and data analytics with Python, HuggingFace, Streamlit, and Google Cloud.
 
 ## Architecture
 
